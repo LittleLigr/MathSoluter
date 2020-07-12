@@ -75,6 +75,11 @@ public class Lexer {
                     addToken(Token.TokenType.SLASH);
                 break;
 
+            case ';':
+                {
+                    addToken(Token.TokenType.END_OF_LINE);
+                }
+
             case ' ':
                 case '\r':
                 case '\t':
@@ -83,7 +88,6 @@ public class Lexer {
 
                 case '\n':
                     line++;
-                    addToken(Token.TokenType.END_OF_LINE);
                 break;
 
             case '"': string(); break;
@@ -114,7 +118,7 @@ public class Lexer {
 
         Token.TokenType type = keywords.get(text);
         if (type == null) type = Token.TokenType.IDENTIFIER;
-        addToken(type);
+        addToken(type, null);
     }
 
     private boolean isAlpha(char c) {

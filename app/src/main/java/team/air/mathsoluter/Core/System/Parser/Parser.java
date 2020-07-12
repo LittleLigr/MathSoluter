@@ -6,7 +6,7 @@ import team.air.mathsoluter.Core.System.Token;
 
 public class Parser {
 
-    Expression result;
+
     int id = 0;
     ArrayList<Token> tokens;
 
@@ -15,12 +15,15 @@ public class Parser {
         this.tokens = tokens;
     }
 
-    public Expression parse() {
-        try {
-            return expression();
-        } catch (Exception error) {
-            return null;
+    public ArrayList<Statement> parse() {
+        ArrayList<Statement> statements = new ArrayList<>();
+        while (isNoEnd()) {
+            Statement decl = declaration();
+
+                statements.add(decl);
         }
+
+        return statements;
     }
 
     /*
@@ -36,8 +39,80 @@ public class Parser {
 
      */
 
+    private Statement declaration()
+    {
+        try {
+            if(match(Token.TokenType.VAR))return varDeclaration();
+            return statement();
+        }
+        catch (ParserError e)
+        {
+            return null;
+        }
+    }
+
+    private Statement varDeclaration() {
+        Token name = consume(Token.TokenType.IDENTIFIER, "Expect variable name.");
+
+        Expression initializer = null;
+        if (match(Token.TokenType.EQUAL)) {
+            initializer = expression();
+        }
+
+        consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
+        return new Statement.VarStatement(name, initializer);
+    }
+
+    private Statement statement() {
+        if (match(Token.TokenType.PRINT)) return printStatement();
+        if (match(Token.TokenType.BRACE_BRACKET_OPEN)) return new Statement.BlockStatement(block());
+
+        return expressionStatement();
+    }
+
+    private Statement printStatement() {
+        Expression value = expression();
+        consume(Token.TokenType.END_OF_LINE, "Expect ';' after value.");
+        return new Statement.PrintStatement(value);
+    }
+
+    private Statement expressionStatement() {
+        Expression expr = expression();
+        consume(Token.TokenType.END_OF_LINE, "Expect ';' after expression.");
+        return new Statement.ExpressionStatement(expr);
+    }
+
+    private ArrayList<Statement> block() {
+        ArrayList<Statement> statements = new ArrayList<>();
+
+        while (!check(Token.TokenType.BRACE_BRACKET_CLOSE) && isNoEnd()) {
+            statements.add(declaration());
+        }
+
+        consume(Token.TokenType.BRACE_BRACKET_CLOSE, "Expect '}' after block.");
+        return statements;
+    }
+
     Expression expression() {
+
         return equality();
+    }
+
+    private Expression assignment() {
+        Expression expr = equality();
+
+        if (match(Token.TokenType.EQUAL)) {
+            Token equals = previous();
+            Expression value = assignment();
+
+            if (expr instanceof Expression.Variable) {
+                Token name = ((Expression.Variable)expr).value;
+                return new Expression.Assign(name, value);
+            }
+
+        }
+
+        return expr;
     }
 
     Expression equality()
@@ -115,6 +190,10 @@ public class Parser {
 
         if (match(Token.TokenType.NUMERICAL, Token.TokenType.STRING))
             return new Expression.Literal(previous().literal);
+
+        if (match(Token.TokenType.IDENTIFIER)) {
+            return new Expression.Variable(previous());
+        }
 
         if (match(Token.TokenType.OPERATOR_BRACKET_OPEN)) {
             Expression expr = equality();

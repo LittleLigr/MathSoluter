@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import team.air.mathsoluter.Core.System.Lexer.Lexer;
 import team.air.mathsoluter.Core.System.Parser.Expression;
+import team.air.mathsoluter.Core.System.Parser.Interpretator;
 import team.air.mathsoluter.Core.System.Parser.Parser;
 import team.air.mathsoluter.Core.System.Token;
 
@@ -26,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Token> tokens = new Lexer().lex(v.getText().toString());
         for(Token t :tokens)
             System.out.println(t.toString());
-        Expression expression = new Parser(tokens).parse();
-        System.out.println(expression.toString());
+        new Interpretator().interpret(new Parser(tokens).parse());
     }
 }
