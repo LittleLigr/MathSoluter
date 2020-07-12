@@ -8,6 +8,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import team.air.mathsoluter.Core.System.Lexer.Lexer;
+import team.air.mathsoluter.Core.System.Parser.Expression;
+import team.air.mathsoluter.Core.System.Parser.Parser;
 import team.air.mathsoluter.Core.System.Token;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,10 +22,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void click(View view)
     {
-        System.out.println("TEST");
         TextView v = (TextView)findViewById(R.id.editText);
         ArrayList<Token> tokens = new Lexer().lex(v.getText().toString());
         for(Token t :tokens)
             System.out.println(t.toString());
+        Expression expression = new Parser(tokens).parse();
+        System.out.println(expression.toString());
     }
 }
