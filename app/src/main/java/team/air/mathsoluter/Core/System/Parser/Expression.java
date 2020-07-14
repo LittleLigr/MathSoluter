@@ -320,7 +320,7 @@ public class Expression implements ActionListener {
         @Override
         public Object doAction(Enviroment enviroment) {
             Object value = expression.doAction(enviroment);
-            enviroment.assign(name, expression);
+            enviroment.assign(name, value);
             return value;
         }
     }

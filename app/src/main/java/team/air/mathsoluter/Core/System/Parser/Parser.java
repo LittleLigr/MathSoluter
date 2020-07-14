@@ -22,7 +22,7 @@ public class Parser {
 
                 statements.add(decl);
         }
-
+        
         return statements;
     }
 
@@ -94,8 +94,8 @@ public class Parser {
     }
 
     Expression expression() {
+        return assignment();
 
-        return equality();
     }
 
     private Expression assignment() {
