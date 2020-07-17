@@ -19,8 +19,7 @@ public class Parser {
         ArrayList<Statement> statements = new ArrayList<>();
         while (isNoEnd()) {
             Statement decl = declaration();
-
-                statements.add(decl);
+            statements.add(decl);
         }
         
         return statements;
@@ -42,6 +41,7 @@ public class Parser {
     private Statement declaration()
     {
         try {
+            if(match(Token.TokenType.FUNCTION)) return functionStatement("function");
             if(match(Token.TokenType.VAR))return varDeclaration();
             return statement();
         }
@@ -65,9 +65,21 @@ public class Parser {
 
     private Statement statement() {
         if (match(Token.TokenType.PRINT)) return printStatement();
+        if(match(Token.TokenType.RETURN)) return returnStatement();
         if (match(Token.TokenType.BRACE_BRACKET_OPEN)) return new Statement.BlockStatement(block());
 
         return expressionStatement();
+    }
+
+    private Statement returnStatement() {
+        Token keyword = previous();
+        Expression value = null;
+        if (!check(Token.TokenType.END_OF_LINE)) {
+            value = expression();
+        }
+
+        consume(Token.TokenType.END_OF_LINE, "Expect ';' after return value.");
+        return new Statement.ReturnStatement(value);
     }
 
     private Statement printStatement() {
@@ -91,6 +103,25 @@ public class Parser {
 
         consume(Token.TokenType.BRACE_BRACKET_CLOSE, "Expect '}' after block.");
         return statements;
+    }
+
+    private Statement.FunctionStatement functionStatement(String name)
+    {
+        Token funcName = consume(Token.TokenType.IDENTIFIER, "Expect "+name+" function");
+        consume(Token.TokenType.OPERATOR_BRACKET_OPEN, "expect (");
+
+        ArrayList<Token> parameters = new ArrayList<>();
+
+        if(!check(Token.TokenType.OPERATOR_BRACKET_CLOSE))
+            do {
+                parameters.add(consume(Token.TokenType.IDENTIFIER, "expect param"));
+            }
+            while(match(Token.TokenType.COMMA));
+
+        consume(Token.TokenType.OPERATOR_BRACKET_CLOSE, "expect )");
+        consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' before " + name + " body.");
+        ArrayList<Statement> body = block();
+        return new Statement.FunctionStatement(funcName, parameters, body);
     }
 
     Expression expression() {
@@ -179,7 +210,35 @@ public class Parser {
             Expression right = unary();
             return new Expression.Unary(operator, right);
         }
-        return primary();
+        return call();
+    }
+
+    Expression call(){
+        Expression expr = primary();
+        while (true)
+        {
+            if(match(Token.TokenType.OPERATOR_BRACKET_OPEN))
+                expr = finishCall(expr);
+            else
+                break;
+        }
+
+        return expr;
+    }
+
+    Expression finishCall(Expression callee)
+    {
+        ArrayList<Expression> arguments = new ArrayList<>();
+        if(!check(Token.TokenType.OPERATOR_BRACKET_CLOSE))
+        {
+            do {
+                arguments.add(expression());
+            }
+            while (match(Token.TokenType.COMMA));
+        }
+
+        Token parent = consume(Token.TokenType.OPERATOR_BRACKET_CLOSE, "");
+        return new Expression.Call(callee, arguments);
     }
 
     Expression primary()

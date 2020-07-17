@@ -19,14 +19,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TextView v = (TextView)findViewById(R.id.editText);
+        v.setText("function name(a)" +
+                "{" +
+                "print a;" +
+                "}" +
+                "name(\"iva\");");
     }
 
     public void click(View view)
     {
         TextView v = (TextView)findViewById(R.id.editText);
         ArrayList<Token> tokens = new Lexer().lex(v.getText().toString());
-        for(Token t :tokens)
-            System.out.println(t.toString());
         new Interpretator().interpret(new Parser(tokens).parse());
     }
 }

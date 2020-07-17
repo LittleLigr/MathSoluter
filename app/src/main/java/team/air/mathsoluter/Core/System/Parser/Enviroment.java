@@ -1,6 +1,8 @@
 package team.air.mathsoluter.Core.System.Parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import team.air.mathsoluter.Core.System.Token;
@@ -8,6 +10,20 @@ import team.air.mathsoluter.Core.System.Token;
 public class Enviroment {
 
     final Enviroment master;
+    static Enviroment global = new Enviroment();
+    static {
+        global.define("system_clock", new FunctionListener() {
+            @Override
+            public Object call(Enviroment enviroment, ArrayList<Object> arguments) {
+                return (double)System.currentTimeMillis();
+            }
+
+            @Override
+            public int arg() {
+                return 0;
+            }
+        });
+    }
 
     private Map<String, Object> values = new HashMap<>();
 
@@ -27,7 +43,15 @@ public class Enviroment {
         if(values.containsKey(name.lexeme))
             return values.get(name.lexeme);
         if (master != null) return master.get(name);
+        else if(global.contain(name)) return global.get(name);
         throw new ParserError();
+    }
+
+    boolean contain(Token name)
+    {
+        if(values.containsKey(name.lexeme))
+            return true;
+        return false;
     }
 
     void assign(Token name, Object value) {

@@ -2,6 +2,8 @@ package team.air.mathsoluter.Core.System.Parser;
 
 import android.widget.Switch;
 
+import java.util.ArrayList;
+
 import team.air.mathsoluter.Core.System.Token;
 
 public class Expression implements ActionListener {
@@ -235,6 +237,49 @@ public class Expression implements ActionListener {
         @Override
         public Object doAction(Enviroment enviroment) {
             return value;
+        }
+    }
+
+    static class Call extends Expression{
+
+        final Expression callee;
+        final ArrayList<Expression> arguments;
+
+        public Call(Expression callee, ArrayList<Expression> arguments)
+        {
+            this.callee = callee;
+            this.arguments = arguments;
+        }
+
+        @Override
+        public String toString() {
+            return callee.toString();
+        }
+
+
+        @Override
+        public boolean isNotNull() {
+            if(callee!=null && arguments!=null)
+                return true;
+            return false;
+        }
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Object calleeResult = callee.doAction(enviroment);
+
+            if(!(calleeResult instanceof FunctionListener))
+                throw new ParserError();
+
+            FunctionListener functionStatement = (FunctionListener)calleeResult;
+
+            if(arguments.size() != functionStatement.arg())
+                throw new ParserError();
+
+            ArrayList<Object> arguments = new ArrayList<>();
+            for (Expression arg : this.arguments)
+                arguments.add(arg.doAction(enviroment));
+
+            return functionStatement.call(enviroment, arguments);
         }
     }
 

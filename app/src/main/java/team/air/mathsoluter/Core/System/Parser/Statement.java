@@ -85,4 +85,40 @@ public class Statement implements ActionListener{
         }
     }
 
+    static class FunctionStatement extends Statement
+    {
+        final ArrayList<Token> arguments;
+        final Token name;
+        final BlockStatement body;
+
+        public FunctionStatement(Token name, ArrayList<Token> arguments, ArrayList<Statement> body) {
+            this.arguments = arguments;
+            this.body = new BlockStatement(body);
+            this.name = name;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            enviroment.define(name.lexeme, new Function(this));
+
+            return null;
+        }
+    }
+
+    static class ReturnStatement extends Statement
+    {
+      final Expression value;
+
+        public ReturnStatement(Expression value) {
+            this.value = value;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            if(value!=null)
+                throw new Return(value.doAction(enviroment));
+            return null;
+        }
+    }
+
 }
