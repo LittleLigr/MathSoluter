@@ -243,6 +243,9 @@ public class Parser {
 
     Expression primary()
     {
+        if(match(Token.TokenType.BACK_SLASH))
+            return texExpression();
+
         if (match(Token.TokenType.FALSE)) return new Expression.Literal(false);
         if (match(Token.TokenType.TRUE)) return new Expression.Literal(true);
         if (match(Token.TokenType.NULL)) return new Expression.Literal(null);
@@ -250,9 +253,8 @@ public class Parser {
         if (match(Token.TokenType.NUMERICAL, Token.TokenType.STRING))
             return new Expression.Literal(previous().literal);
 
-        if (match(Token.TokenType.IDENTIFIER)) {
+        if (match(Token.TokenType.IDENTIFIER))
             return new Expression.Variable(previous());
-        }
 
         if (match(Token.TokenType.OPERATOR_BRACKET_OPEN)) {
             Expression expr = equality();
@@ -261,6 +263,34 @@ public class Parser {
         }
 
         return null;
+    }
+
+    private Expression texExpression()
+    {
+        if(match(Token.TokenType.FRAC))
+            return mathExpression2Arg(previous().type);
+        if(match(Token.TokenType.SIN, Token.TokenType.COS, Token.TokenType.TAN))
+            return mathExpression1Arg(previous().type);
+        return null;
+    }
+
+    private Expression mathExpression2Arg(Token.TokenType type)
+    {
+        consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' after expression.");
+        Expression expr1 = expression();
+        consume(Token.TokenType.BRACE_BRACKET_CLOSE, "Expect '}' after expression.");
+        consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' after expression.");
+        Expression expr2 = expression();
+        consume(Token.TokenType.BRACE_BRACKET_CLOSE, "Expect '}' after expression.");
+        return new Expression.MathExpression2Arg(type, expr1, expr2);
+    }
+
+    private Expression mathExpression1Arg(Token.TokenType type)
+    {
+        consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' after expression.");
+        Expression expr1 = expression();
+        consume(Token.TokenType.BRACE_BRACKET_CLOSE, "Expect '}' after expression.");
+        return new Expression.MathExpression1Arg(type, expr1);
     }
 
     private Token consume(Token.TokenType type, String message) {

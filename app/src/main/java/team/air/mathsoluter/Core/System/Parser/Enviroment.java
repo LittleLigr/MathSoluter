@@ -23,6 +23,7 @@ public class Enviroment {
                 return 0;
             }
         });
+
     }
 
     private Map<String, Object> values = new HashMap<>();

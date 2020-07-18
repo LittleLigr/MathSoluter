@@ -25,6 +25,18 @@ public class Lexer {
         keywords.put("return", Token.TokenType.RETURN);
         keywords.put("print", Token.TokenType.PRINT);
         keywords.put("or", Token.TokenType.OR);
+        keywords.put("frac", Token.TokenType.FRAC);
+        keywords.put("sin", Token.TokenType.SIN);
+        keywords.put("cos", Token.TokenType.COS);
+        keywords.put("tan", Token.TokenType.TAN);
+        keywords.put("log", Token.TokenType.LOG);
+        keywords.put("exp", Token.TokenType.EXP);
+        keywords.put("bmod", Token.TokenType.BMOD);
+        keywords.put("sqrt", Token.TokenType.SQRT);
+        keywords.put("sum", Token.TokenType.SUM);
+        keywords.put("int", Token.TokenType.INTEGRAL);
+        keywords.put("infty", Token.TokenType.INFINITY);
+        keywords.put("mathrm", Token.TokenType.MATHTHERM);
     }
 
     int current = 0;
@@ -35,7 +47,6 @@ public class Lexer {
     boolean isError = false;
     public ArrayList<Token> lex(String reg)
     {
-
         code = reg;
         tokens = new ArrayList<>();
         while(current < code.length())
@@ -45,7 +56,6 @@ public class Lexer {
             if(isError)
                 return null;
         }
-
         return tokens;
     }
 
@@ -76,9 +86,11 @@ public class Lexer {
                 break;
 
             case ';':
-                {
-                    addToken(Token.TokenType.END_OF_LINE);
-                }
+                    addToken(Token.TokenType.END_OF_LINE); break;
+            case '#':
+                addToken(Token.TokenType.DOG_SYMBOL); break;
+            case '\\':
+                addToken(Token.TokenType.BACK_SLASH); break;
 
             case ' ':
                 case '\r':

@@ -370,6 +370,71 @@ public class Expression implements ActionListener {
         }
     }
 
+    static class MathExpression2Arg extends Expression{
+
+        final Expression expression1, expression2;
+        final Token.TokenType type;
+
+        public MathExpression2Arg(Token.TokenType type, Expression expression1, Expression expression2)
+        {
+            this.type = type;
+            this.expression1 = expression1;
+            this.expression2 = expression2;
+        }
+
+        @Override
+        public boolean isNotNull() {
+            if(type!=null && expression1!=null&& expression2!=null)
+                return true;
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return type.toString()+" ("+expression1.toString()+","+expression2.toString()+")";
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            if(type== Token.TokenType.FRAC)
+                return (new Binary(expression1, new Token(Token.TokenType.SLASH), expression2).doAction(enviroment));
+            return null;
+        }
+    }
+
+    static class MathExpression1Arg extends Expression{
+
+        final Expression expression;
+        final Token.TokenType type;
+
+        public MathExpression1Arg(Token.TokenType type, Expression expression)
+        {
+            this.type = type;
+            this.expression = expression;
+        }
+
+        @Override
+        public boolean isNotNull() {
+            if(type!=null && expression!=null)
+                return true;
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return type.toString()+" (" +expression.toString()+")";
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            if(type== Token.TokenType.SIN)
+                return Math.sin((double)expression.doAction(enviroment));
+            //Object value = expression.doAction(enviroment);
+            //enviroment.assign(name, value);
+            return null;
+        }
+    }
+
     @Override
     public String toString() {
         return "empty expression";

@@ -121,4 +121,18 @@ public class Statement implements ActionListener{
         }
     }
 
+    static class MathStatement extends Statement
+    {
+        final ArrayList<Statement> statements;
+
+        public MathStatement(ArrayList<Statement> statements) {
+            this.statements = statements;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            return null;
+        }
+    }
+
 }
