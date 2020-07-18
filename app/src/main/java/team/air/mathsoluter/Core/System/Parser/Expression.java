@@ -427,10 +427,21 @@ public class Expression implements ActionListener {
 
         @Override
         public Object doAction(Enviroment enviroment) {
-            if(type== Token.TokenType.SIN)
-                return Math.sin((double)expression.doAction(enviroment));
-            //Object value = expression.doAction(enviroment);
-            //enviroment.assign(name, value);
+            switch(type)
+            {
+                case SIN:
+                    return Math.sin((double)expression.doAction(enviroment));
+                case COS:
+                    return Math.cos((double)expression.doAction(enviroment));
+                case TAN:
+                    return Math.tan((double)expression.doAction(enviroment));
+                case EXP:
+                    return Math.exp((double)expression.doAction(enviroment));
+                case SQRT:
+                    return Math.sqrt((double)expression.doAction(enviroment));
+                case LOG:
+                    return Math.log((double)expression.doAction(enviroment));
+            }
             return null;
         }
     }
