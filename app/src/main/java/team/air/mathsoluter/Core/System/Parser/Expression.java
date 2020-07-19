@@ -2,6 +2,8 @@ package team.air.mathsoluter.Core.System.Parser;
 
 import android.widget.Switch;
 
+import java.util.ArrayList;
+
 import team.air.mathsoluter.Core.System.Token;
 
 public class Expression implements ActionListener {
@@ -238,6 +240,49 @@ public class Expression implements ActionListener {
         }
     }
 
+    static class Call extends Expression{
+
+        final Expression callee;
+        final ArrayList<Expression> arguments;
+
+        public Call(Expression callee, ArrayList<Expression> arguments)
+        {
+            this.callee = callee;
+            this.arguments = arguments;
+        }
+
+        @Override
+        public String toString() {
+            return callee.toString();
+        }
+
+
+        @Override
+        public boolean isNotNull() {
+            if(callee!=null && arguments!=null)
+                return true;
+            return false;
+        }
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Object calleeResult = callee.doAction(enviroment);
+
+            if(!(calleeResult instanceof FunctionListener))
+                throw new ParserError();
+
+            FunctionListener functionStatement = (FunctionListener)calleeResult;
+
+            if(arguments.size() != functionStatement.arg())
+                throw new ParserError();
+
+            ArrayList<Object> arguments = new ArrayList<>();
+            for (Expression arg : this.arguments)
+                arguments.add(arg.doAction(enviroment));
+
+            return functionStatement.call(enviroment, arguments);
+        }
+    }
+
     static class Variable extends Expression{
 
         Token value;
@@ -322,6 +367,161 @@ public class Expression implements ActionListener {
             Object value = expression.doAction(enviroment);
             enviroment.assign(name, value);
             return value;
+        }
+    }
+
+    static class Logical extends Expression{
+
+        final Expression expression1, expression2;
+        final Token operator;
+
+        public Logical(Expression expression1,Token operator,  Expression expression2)
+        {
+            this.operator = operator;
+            this.expression1 = expression1;
+            this.expression2 = expression2;
+        }
+
+        @Override
+        public boolean isNotNull() {
+            if(operator!=null && expression1!=null&& expression2!=null)
+                return true;
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return operator.toString()+" ("+expression1.toString()+","+expression2.toString()+")";
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Object left = expression1.doAction(enviroment);
+
+            if (operator.type == Token.TokenType.OR) {
+                if ((boolean)left==true) return left;
+            } else {
+                if (!(boolean)left) return left;
+            }
+
+            return (boolean)expression2.doAction(enviroment);
+        }
+    }
+
+    static class MathExpression3Arg extends Expression{
+
+        final Expression expression1, expression2, expression3;
+        final Token.TokenType type;
+
+        public MathExpression3Arg(Token.TokenType type, Expression expression1, Expression expression2, Expression expression3)
+        {
+            this.type = type;
+            this.expression1 = expression1;
+            this.expression2 = expression2;
+            this.expression3 = expression3;
+        }
+
+        @Override
+        public boolean isNotNull() {
+            if(type!=null && expression1!=null&& expression2!=null)
+                return true;
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return type.toString()+" ("+expression1.toString()+","+expression2.toString()+","+expression3.toString()+")";
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Token token = new Token(type, type.toString(), null, 0);
+            Object func = enviroment.get(token);
+            if(func!=null&&func instanceof FunctionListener)
+            {
+                ArrayList<Object> arg = new ArrayList<>();
+                arg.add(expression1.doAction(enviroment));
+                arg.add(expression2.doAction(enviroment));
+                arg.add(expression3.doAction(enviroment));
+                return ((FunctionListener)func).call(enviroment, arg);
+            }
+            throw new RuntimeException("math 3 arg exception");
+        }
+    }
+
+    static class MathExpression2Arg extends Expression{
+
+        final Expression expression1, expression2;
+        final Token.TokenType type;
+
+        public MathExpression2Arg(Token.TokenType type, Expression expression1, Expression expression2)
+        {
+            this.type = type;
+            this.expression1 = expression1;
+            this.expression2 = expression2;
+        }
+
+        @Override
+        public boolean isNotNull() {
+            if(type!=null && expression1!=null&& expression2!=null)
+                return true;
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return type.toString()+" ("+expression1.toString()+","+expression2.toString()+")";
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            if(type== Token.TokenType.FRAC)
+                return (new Binary(expression1, new Token(Token.TokenType.SLASH), expression2).doAction(enviroment));
+            return null;
+        }
+    }
+
+    static class MathExpression1Arg extends Expression{
+
+        final Expression expression;
+        final Token.TokenType type;
+
+        public MathExpression1Arg(Token.TokenType type, Expression expression)
+        {
+            this.type = type;
+            this.expression = expression;
+        }
+
+        @Override
+        public boolean isNotNull() {
+            if(type!=null && expression!=null)
+                return true;
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return type.toString()+" (" +expression.toString()+")";
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            switch(type)
+            {
+                case SIN:
+                    return Math.sin((double)expression.doAction(enviroment));
+                case COS:
+                    return Math.cos((double)expression.doAction(enviroment));
+                case TAN:
+                    return Math.tan((double)expression.doAction(enviroment));
+                case EXP:
+                    return Math.exp((double)expression.doAction(enviroment));
+                case SQRT:
+                    return Math.sqrt((double)expression.doAction(enviroment));
+                case LOG:
+                    return Math.log((double)expression.doAction(enviroment));
+            }
+            return null;
         }
     }
 

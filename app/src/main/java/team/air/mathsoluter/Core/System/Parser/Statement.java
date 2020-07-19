@@ -68,6 +68,44 @@ public class Statement implements ActionListener{
         }
     }
 
+    static class WhileStatement extends Statement
+    {
+        final Expression condition;
+        final Statement body;
+        public WhileStatement(Expression condition, Statement body) {
+            this.condition = condition;
+            this.body = body;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            while ((boolean)condition.doAction(enviroment)==true)
+                body.doAction(enviroment);
+            return null;
+        }
+    }
+
+    static class IfStatement extends Statement
+    {
+        final Expression condition;
+        final Statement thenBranch, elseBranch;
+        public IfStatement(Expression condition,  Statement thenBranch, Statement elseBranch) {
+            this.condition = condition;
+            this.thenBranch = thenBranch;
+            this.elseBranch = elseBranch;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Object cond = condition.doAction(enviroment);
+           if(cond!=null&&(boolean)cond==true)
+               thenBranch.doAction(enviroment);
+           else if(elseBranch!=null)
+               elseBranch.doAction(enviroment);
+           return null;
+        }
+    }
+
     static class BlockStatement extends Statement
     {
         final ArrayList<Statement> statements;
@@ -81,6 +119,56 @@ public class Statement implements ActionListener{
 
            for(Statement statement : statements)
                statement.doAction(enviromentChild);
+            return null;
+        }
+    }
+
+    static class FunctionStatement extends Statement
+    {
+        final ArrayList<Token> arguments;
+        final Token name;
+        final BlockStatement body;
+
+        public FunctionStatement(Token name, ArrayList<Token> arguments, ArrayList<Statement> body) {
+            this.arguments = arguments;
+            this.body = new BlockStatement(body);
+            this.name = name;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            enviroment.define(name.lexeme, new Function(this));
+
+            return null;
+        }
+    }
+
+    static class ReturnStatement extends Statement
+    {
+      final Expression value;
+
+        public ReturnStatement(Expression value) {
+            this.value = value;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            if(value!=null)
+                throw new Return(value.doAction(enviroment));
+            return null;
+        }
+    }
+
+    static class MathStatement extends Statement
+    {
+        final ArrayList<Statement> statements;
+
+        public MathStatement(ArrayList<Statement> statements) {
+            this.statements = statements;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
             return null;
         }
     }

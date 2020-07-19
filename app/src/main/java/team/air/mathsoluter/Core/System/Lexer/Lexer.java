@@ -25,6 +25,18 @@ public class Lexer {
         keywords.put("return", Token.TokenType.RETURN);
         keywords.put("print", Token.TokenType.PRINT);
         keywords.put("or", Token.TokenType.OR);
+        keywords.put("frac", Token.TokenType.FRAC);
+        keywords.put("sin", Token.TokenType.SIN);
+        keywords.put("cos", Token.TokenType.COS);
+        keywords.put("tan", Token.TokenType.TAN);
+        keywords.put("log", Token.TokenType.LOG);
+        keywords.put("exp", Token.TokenType.EXP);
+        keywords.put("bmod", Token.TokenType.BMOD);
+        keywords.put("sqrt_", Token.TokenType.SQRT);
+        keywords.put("sum", Token.TokenType.SUM);
+        keywords.put("int_", Token.TokenType.INTEGRAL);
+        keywords.put("infty", Token.TokenType.INFINITY);
+        keywords.put("mathrm", Token.TokenType.MATHTHERM);
     }
 
     int current = 0;
@@ -35,7 +47,6 @@ public class Lexer {
     boolean isError = false;
     public ArrayList<Token> lex(String reg)
     {
-
         code = reg;
         tokens = new ArrayList<>();
         while(current < code.length())
@@ -45,7 +56,6 @@ public class Lexer {
             if(isError)
                 return null;
         }
-
         return tokens;
     }
 
@@ -61,7 +71,7 @@ public class Lexer {
             case '.': addToken(Token.TokenType.DOT); break;
             case '-': addToken(Token.TokenType.MINUS); break;
             case '+': addToken(Token.TokenType.PLUS); break;
-
+            case '^': addToken(Token.TokenType.CAP); break;
             case '*': addToken(Token.TokenType.STAR); break;
             case '!': addToken(match('=') ? Token.TokenType.BANG_EQUAL : Token.TokenType.BANG); break;
             case '=': addToken(match('=') ? Token.TokenType.EQUAL_EQUAL : Token.TokenType.EQUAL); break;
@@ -76,9 +86,11 @@ public class Lexer {
                 break;
 
             case ';':
-                {
-                    addToken(Token.TokenType.END_OF_LINE);
-                }
+                    addToken(Token.TokenType.END_OF_LINE); break;
+            case '#':
+                addToken(Token.TokenType.DOG_SYMBOL); break;
+            case '\\':
+                addToken(Token.TokenType.BACK_SLASH); break;
 
             case ' ':
                 case '\r':
@@ -93,7 +105,10 @@ public class Lexer {
             case '"': string(); break;
             case 'o':
                 if (peek() == 'r')
+                {
                     addToken(Token.TokenType.OR);
+                    next();
+                }
                 break;
 
             default:
