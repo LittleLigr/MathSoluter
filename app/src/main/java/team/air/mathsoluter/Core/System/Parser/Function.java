@@ -11,6 +11,7 @@ public class Function implements FunctionListener {
 
     @Override
     public Object call(Enviroment enviroment, ArrayList<Object> arguments) {
+
         Enviroment env = new Enviroment(enviroment);
         for (int i = 0; i < declaration.arguments.size(); i++)
             env.define(declaration.arguments.get(i).lexeme,arguments.get(i));

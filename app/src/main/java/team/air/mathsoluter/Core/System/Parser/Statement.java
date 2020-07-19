@@ -143,6 +143,22 @@ public class Statement implements ActionListener{
         }
     }
 
+    static class UserExpressionStatement extends Statement
+    {
+        final Token name;
+        final  Statement body;
+        public UserExpressionStatement(Token name, Statement body) {
+          this.body = body;
+          this.name = name;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            enviroment.define(name.lexeme, new UserExpressionFunction(this));
+            return null;
+        }
+    }
+
     static class ReturnStatement extends Statement
     {
       final Expression value;

@@ -272,12 +272,21 @@ public class Expression implements ActionListener {
 
             FunctionListener functionStatement = (FunctionListener)calleeResult;
 
-            if(arguments.size() != functionStatement.arg())
-                throw new ParserError();
-
             ArrayList<Object> arguments = new ArrayList<>();
-            for (Expression arg : this.arguments)
-                arguments.add(arg.doAction(enviroment));
+            if(calleeResult instanceof UserExpressionFunction)
+            {
+                for (Expression arg : this.arguments)
+                    arguments.add(arg);
+            }
+            else
+            {
+                if(arguments.size() != functionStatement.arg())
+                    throw new ParserError();
+
+                for (Expression arg : this.arguments)
+                    arguments.add(arg.doAction(enviroment));
+            }
+
 
             return functionStatement.call(enviroment, arguments);
         }
