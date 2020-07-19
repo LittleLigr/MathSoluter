@@ -197,7 +197,6 @@ public class Parser {
 
     Expression expression() {
         return assignment();
-
     }
 
     private Expression assignment() {
@@ -211,9 +210,7 @@ public class Parser {
                 Token name = ((Expression.Variable)expr).value;
                 return new Expression.Assign(name, value);
             }
-
         }
-
         return expr;
     }
 
