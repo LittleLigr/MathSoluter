@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextView v = (TextView)findViewById(R.id.editText);
-        v.setText("print \\int_{1}^{2}{3};");
+        v.setText("for(var a = 0; a < 5; a = a+1)" +
+                "print a;");
         System.out.println(v.getText());
     }
 

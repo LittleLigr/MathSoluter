@@ -1,6 +1,7 @@
 package team.air.mathsoluter.Core.System.Parser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import team.air.mathsoluter.Core.System.Token;
 
@@ -64,12 +65,67 @@ public class Parser {
     }
 
     private Statement statement() {
+        if (match(Token.TokenType.FOR)) return forStatement();
         if (match(Token.TokenType.IF)) return ifStatement();
         if (match(Token.TokenType.PRINT)) return printStatement();
         if(match(Token.TokenType.RETURN)) return returnStatement();
+        if (match(Token.TokenType.WHILE)) return whileStatement();
         if (match(Token.TokenType.BRACE_BRACKET_OPEN)) return new Statement.BlockStatement(block());
 
         return expressionStatement();
+    }
+
+    private Statement forStatement() {
+        consume(Token.TokenType.OPERATOR_BRACKET_OPEN, "Expect '(' after 'while'.");
+        Statement initializer;
+        if (match(Token.TokenType.END_OF_LINE)) {
+            initializer = null;
+        } else if (match(Token.TokenType.VAR)) {
+            initializer = varDeclaration();
+        } else {
+            initializer = expressionStatement();
+        }
+
+        Expression condition = null;
+        if(!check(Token.TokenType.END_OF_LINE))
+            condition=expression();
+        consume(Token.TokenType.END_OF_LINE, "expect ;");
+
+        Expression increment = null;
+        if(!check(Token.TokenType.OPERATOR_BRACKET_CLOSE))
+            increment = expression();
+        consume(Token.TokenType.OPERATOR_BRACKET_CLOSE, "expect )");
+        Statement body = statement();
+
+        if (increment != null)
+        {
+            ArrayList<Statement> list = new ArrayList<>();
+            list.add(body);
+            list.add(new Statement.ExpressionStatement(increment));
+            body = new Statement.BlockStatement(list);
+        }
+
+        if (condition == null) condition = new Expression.Literal(true);
+        body = new Statement.WhileStatement(condition, body);
+
+        if (initializer != null)
+        {
+            ArrayList<Statement> list = new ArrayList<>();
+            list.add(initializer);
+            list.add(body);
+            body = new Statement.BlockStatement(list);
+        }
+
+        return body;
+    }
+
+    private Statement whileStatement() {
+        consume(Token.TokenType.OPERATOR_BRACKET_OPEN, "Expect '(' after 'while'.");
+        Expression condition = expression();
+        consume(Token.TokenType.OPERATOR_BRACKET_CLOSE, "Expect ')' after condition.");
+        Statement body = statement();
+
+        return new Statement.WhileStatement(condition, body);
     }
 
     private Statement ifStatement() {

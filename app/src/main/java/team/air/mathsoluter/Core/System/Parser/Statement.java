@@ -68,6 +68,23 @@ public class Statement implements ActionListener{
         }
     }
 
+    static class WhileStatement extends Statement
+    {
+        final Expression condition;
+        final Statement body;
+        public WhileStatement(Expression condition, Statement body) {
+            this.condition = condition;
+            this.body = body;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            while ((boolean)condition.doAction(enviroment)==true)
+                body.doAction(enviroment);
+            return null;
+        }
+    }
+
     static class IfStatement extends Statement
     {
         final Expression condition;
