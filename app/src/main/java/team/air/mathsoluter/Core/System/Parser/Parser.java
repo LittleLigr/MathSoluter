@@ -245,6 +245,12 @@ public class Parser {
     {
         if(match(Token.TokenType.BACK_SLASH))
             return texExpression();
+        if(match(Token.TokenType.BRACE_BRACKET_OPEN))
+        {
+            Expression expression = expression();
+            consume(Token.TokenType.BRACE_BRACKET_CLOSE, "expect }");
+            return expression;
+        }
 
         if (match(Token.TokenType.FALSE)) return new Expression.Literal(false);
         if (match(Token.TokenType.TRUE)) return new Expression.Literal(true);
