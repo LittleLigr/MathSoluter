@@ -70,6 +70,7 @@ public class Token {
         COMMENT,
         END_OF_LINE,
         PRINT,
+        CAP,
 
         ALPHA,
         ALPHA_CAPITAL,

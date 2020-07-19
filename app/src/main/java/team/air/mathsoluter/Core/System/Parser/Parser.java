@@ -64,11 +64,26 @@ public class Parser {
     }
 
     private Statement statement() {
+        if (match(Token.TokenType.IF)) return ifStatement();
         if (match(Token.TokenType.PRINT)) return printStatement();
         if(match(Token.TokenType.RETURN)) return returnStatement();
         if (match(Token.TokenType.BRACE_BRACKET_OPEN)) return new Statement.BlockStatement(block());
 
         return expressionStatement();
+    }
+
+    private Statement ifStatement() {
+        consume(Token.TokenType.OPERATOR_BRACKET_OPEN, "Expect '(' after 'if'.");
+        Expression condition = expression();
+        consume(Token.TokenType.OPERATOR_BRACKET_CLOSE, "Expect ')' after if condition.");
+
+        Statement thenBranch = statement();
+        Statement elseBranch = null;
+        if (match(Token.TokenType.ELSE)) {
+            elseBranch = statement();
+        }
+
+        return new Statement.IfStatement(condition, thenBranch, elseBranch);
     }
 
     private Statement returnStatement() {
@@ -130,7 +145,7 @@ public class Parser {
     }
 
     private Expression assignment() {
-        Expression expr = equality();
+        Expression expr = or();
 
         if (match(Token.TokenType.EQUAL)) {
             Token equals = previous();
@@ -141,6 +156,30 @@ public class Parser {
                 return new Expression.Assign(name, value);
             }
 
+        }
+
+        return expr;
+    }
+
+    private Expression or() {
+        Expression expr = and();
+
+        while (match(Token.TokenType.OR)) {
+            Token operator = previous();
+            Expression right = and();
+            expr = new Expression.Logical(expr, operator, right);
+        }
+
+        return expr;
+    }
+
+    private Expression and() {
+        Expression expr = equality();
+
+        while (match(Token.TokenType.AND)) {
+            Token operator = previous();
+            Expression right = equality();
+            expr = new Expression.Logical(expr, operator, right);
         }
 
         return expr;
@@ -273,11 +312,28 @@ public class Parser {
 
     private Expression texExpression()
     {
+        if(match(Token.TokenType.INTEGRAL))
+            return mathExpression3Arg(previous().type);
         if(match(Token.TokenType.FRAC))
             return mathExpression2Arg(previous().type);
         if(match(Token.TokenType.SIN, Token.TokenType.COS, Token.TokenType.TAN))
             return mathExpression1Arg(previous().type);
         return null;
+    }
+
+    private Expression mathExpression3Arg(Token.TokenType type)
+    {
+        consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' after expression.");
+        Expression expr1 = expression();
+        consume(Token.TokenType.BRACE_BRACKET_CLOSE, "Expect '}' after expression.");
+        consume(Token.TokenType.CAP, "Expect '^' after expression.");
+        consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' after expression.");
+        Expression expr2 = expression();
+        consume(Token.TokenType.BRACE_BRACKET_CLOSE, "Expect '}' after expression.");
+        consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' after expression.");
+        Expression expr3 = expression();
+        consume(Token.TokenType.BRACE_BRACKET_CLOSE, "Expect '}' after expression.");
+        return new Expression.MathExpression3Arg(type, expr1, expr2, expr3);
     }
 
     private Expression mathExpression2Arg(Token.TokenType type)

@@ -21,14 +21,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         TextView v = (TextView)findViewById(R.id.editText);
-        v.setText("print \\frac{10}{4}-2-\\sin{2};");
+        v.setText("print \\int_{1}^{2}{3};");
         System.out.println(v.getText());
     }
 
     public void click(View view)
     {
         TextView v = (TextView)findViewById(R.id.editText);
-        ArrayList<Token> tokens = new Lexer().lex(v.getText().toString());
+        String integ = "function INTEGRAL(down, top, value)" +
+                "{" +
+                "return down+top+value;" +
+                "}";
+        ArrayList<Token> tokens = new Lexer().lex(integ+v.getText().toString());
         //for(Token tok : tokens)
             //System.out.println(tok.type);
      //   ArrayList<Statement> tokens_pars = new Parser(tokens).parse();

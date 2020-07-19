@@ -32,9 +32,9 @@ public class Lexer {
         keywords.put("log", Token.TokenType.LOG);
         keywords.put("exp", Token.TokenType.EXP);
         keywords.put("bmod", Token.TokenType.BMOD);
-        keywords.put("sqrt", Token.TokenType.SQRT);
+        keywords.put("sqrt_", Token.TokenType.SQRT);
         keywords.put("sum", Token.TokenType.SUM);
-        keywords.put("int", Token.TokenType.INTEGRAL);
+        keywords.put("int_", Token.TokenType.INTEGRAL);
         keywords.put("infty", Token.TokenType.INFINITY);
         keywords.put("mathrm", Token.TokenType.MATHTHERM);
     }
@@ -71,7 +71,7 @@ public class Lexer {
             case '.': addToken(Token.TokenType.DOT); break;
             case '-': addToken(Token.TokenType.MINUS); break;
             case '+': addToken(Token.TokenType.PLUS); break;
-
+            case '^': addToken(Token.TokenType.CAP); break;
             case '*': addToken(Token.TokenType.STAR); break;
             case '!': addToken(match('=') ? Token.TokenType.BANG_EQUAL : Token.TokenType.BANG); break;
             case '=': addToken(match('=') ? Token.TokenType.EQUAL_EQUAL : Token.TokenType.EQUAL); break;
@@ -105,7 +105,10 @@ public class Lexer {
             case '"': string(); break;
             case 'o':
                 if (peek() == 'r')
+                {
                     addToken(Token.TokenType.OR);
+                    next();
+                }
                 break;
 
             default:

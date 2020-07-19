@@ -68,6 +68,27 @@ public class Statement implements ActionListener{
         }
     }
 
+    static class IfStatement extends Statement
+    {
+        final Expression condition;
+        final Statement thenBranch, elseBranch;
+        public IfStatement(Expression condition,  Statement thenBranch, Statement elseBranch) {
+            this.condition = condition;
+            this.thenBranch = thenBranch;
+            this.elseBranch = elseBranch;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Object cond = condition.doAction(enviroment);
+           if(cond!=null&&(boolean)cond==true)
+               thenBranch.doAction(enviroment);
+           else if(elseBranch!=null)
+               elseBranch.doAction(enviroment);
+           return null;
+        }
+    }
+
     static class BlockStatement extends Statement
     {
         final ArrayList<Statement> statements;
