@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import katex.hourglass.in.mathlib.MathView;
 import team.air.mathsoluter.Core.System.Lexer.Lexer;
 import team.air.mathsoluter.Core.System.Parser.Expression;
 import team.air.mathsoluter.Core.System.Parser.Interpretator;
@@ -28,15 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void click(View view)
     {
+        MathView katex = findViewById(R.id.math);
         TextView v = (TextView)findViewById(R.id.editText);
-        String integ = "function INTEGRAL(down, top, value)" +
-                "{" +
-                "return down+top+value;" +
-                "}";
-        ArrayList<Token> tokens = new Lexer().lex(integ+v.getText().toString());
-        //for(Token tok : tokens)
-            //System.out.println(tok.type);
-     //   ArrayList<Statement> tokens_pars = new Parser(tokens).parse();
-        new Interpretator().interpret(new Parser(tokens).parse());
+        katex.setDisplayText("$$"+v.getText().toString()+"$$");
     }
 }
