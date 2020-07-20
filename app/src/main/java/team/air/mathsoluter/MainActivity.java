@@ -8,6 +8,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import team.air.mathsoluter.Core.System.Lexer.Lexer;
+import team.air.mathsoluter.Core.System.Parser.Expression;
+import team.air.mathsoluter.Core.System.Parser.Interpretator;
+import team.air.mathsoluter.Core.System.Parser.Parser;
+import team.air.mathsoluter.Core.System.Parser.Statement;
 import team.air.mathsoluter.Core.System.Token;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,14 +20,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        TextView v = (TextView)findViewById(R.id.editText);
+        v.setText("for(var a = 0; a < 5; a = a+1)" +
+                "print a;");
+        System.out.println(v.getText());
     }
 
     public void click(View view)
     {
-        System.out.println("TEST");
         TextView v = (TextView)findViewById(R.id.editText);
-        ArrayList<Token> tokens = new Lexer().lex(v.getText().toString());
-        for(Token t :tokens)
-            System.out.println(t.toString());
+        String integ = "function INTEGRAL(down, top, value)" +
+                "{" +
+                "return down+top+value;" +
+                "}";
+        ArrayList<Token> tokens = new Lexer().lex(integ+v.getText().toString());
+        //for(Token tok : tokens)
+            //System.out.println(tok.type);
+     //   ArrayList<Statement> tokens_pars = new Parser(tokens).parse();
+        new Interpretator().interpret(new Parser(tokens).parse());
     }
 }
