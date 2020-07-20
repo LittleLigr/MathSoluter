@@ -280,13 +280,12 @@ public class Expression implements ActionListener {
             }
             else
             {
-                if(arguments.size() != functionStatement.arg())
+                if(this.arguments.size() != functionStatement.arg())
                     throw new ParserError();
 
                 for (Expression arg : this.arguments)
                     arguments.add(arg.doAction(enviroment));
             }
-
 
             return functionStatement.call(enviroment, arguments);
         }
