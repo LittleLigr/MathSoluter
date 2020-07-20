@@ -7,7 +7,6 @@ import team.air.mathsoluter.Core.System.Token;
 
 public class Parser {
 
-
     int id = 0;
     ArrayList<Token> tokens;
 
@@ -43,6 +42,7 @@ public class Parser {
     {
         try {
             if(match(Token.TokenType.FUNCTION)) return functionStatement("function");
+            if(match(Token.TokenType.DOG_SYMBOL)) return undefinedExpression();
             if(match(Token.TokenType.VAR))return varDeclaration();
             return statement();
         }
@@ -50,6 +50,17 @@ public class Parser {
         {
             return null;
         }
+    }
+
+    private Statement undefinedExpression()
+    {
+        Token name = consume(Token.TokenType.IDENTIFIER, "Expect variable name.");
+        Statement body = null;
+        if (match(Token.TokenType.EQUAL)) {
+            body = new Statement.ReturnStatement(expression());
+        }
+        consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
+        return new Statement.UserExpressionStatement(name, body);
     }
 
     private Statement varDeclaration() {

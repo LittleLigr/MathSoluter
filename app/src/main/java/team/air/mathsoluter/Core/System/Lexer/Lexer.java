@@ -87,7 +87,7 @@ public class Lexer {
 
             case ';':
                     addToken(Token.TokenType.END_OF_LINE); break;
-            case '#':
+            case '@':
                 addToken(Token.TokenType.DOG_SYMBOL); break;
             case '\\':
                 addToken(Token.TokenType.BACK_SLASH); break;
