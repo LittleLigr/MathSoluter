@@ -1,36 +1,48 @@
 package team.air.mathsoluter;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import katex.hourglass.in.mathlib.MathView;
-import team.air.mathsoluter.Core.System.Lexer.Lexer;
-import team.air.mathsoluter.Core.System.Parser.Expression;
-import team.air.mathsoluter.Core.System.Parser.Interpretator;
-import team.air.mathsoluter.Core.System.Parser.Parser;
-import team.air.mathsoluter.Core.System.Parser.Statement;
-import team.air.mathsoluter.Core.System.Token;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ViewPager pager;
+    private PagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView v = (TextView)findViewById(R.id.editText);
-        v.setText("for(var a = 0; a < 5; a = a+1)" +
-                "print a;");
-        System.out.println(v.getText());
+        List<Fragment> list = new ArrayList<>();
+        list.add(new MainFragment());
+        list.add(new ExpressionFragment());
+        pager = findViewById(R.id.pager);
+        pagerAdapter = new SlidePagerAdapter(getSupportFragmentManager() , list);
+        pager.setAdapter(pagerAdapter);
+//        getSupportFragmentManager().beginTransaction()
+//                .add(R.id.pager , new MainFragment())
+//                .add(R.id.pager , new ExpressionFragment())
+//                .commit();
+
+        MainViewModel model = ViewModelProviders.of(this).get(MainViewModel.class);
     }
 
-    public void click(View view)
+    public void onClickButtonFragment()
     {
-        MathView katex = findViewById(R.id.math);
-        TextView v = (TextView)findViewById(R.id.editText);
-        katex.setDisplayText("$$"+v.getText().toString()+"$$");
+
     }
 }
