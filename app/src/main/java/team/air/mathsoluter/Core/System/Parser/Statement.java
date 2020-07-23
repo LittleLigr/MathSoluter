@@ -1,6 +1,8 @@
 package team.air.mathsoluter.Core.System.Parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import team.air.mathsoluter.Core.System.Token;
 
@@ -142,6 +144,29 @@ public class Statement implements ActionListener{
             return null;
         }
     }
+
+    static class ClassStatement extends Statement
+    {
+        final ArrayList<FunctionStatement> functionStatements;
+        final Token name;
+
+        public ClassStatement(Token name, ArrayList<FunctionStatement> functionStatements) {
+            this.functionStatements = functionStatements;
+            this.name = name;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Map<String, Function> methods = new HashMap<>();
+            for (Statement.FunctionStatement method : functionStatements) {
+                Function function = new Function(method, enviroment);
+                methods.put(method.name.lexeme, function);
+            }
+            enviroment.define(name.lexeme, new Class(name.lexeme, methods));
+            return null;
+        }
+    }
+
 
     static class UserExpressionStatement extends Statement
     {

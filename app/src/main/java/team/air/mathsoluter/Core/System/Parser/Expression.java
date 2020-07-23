@@ -416,6 +416,49 @@ public class Expression implements ActionListener {
         }
     }
 
+    static class Get extends Expression{
+
+        final Token name;
+        final Expression expression;
+        Get(Expression expression,Token name)
+        {
+            this.expression = expression;
+            this.name = name;
+
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Object value = expression.doAction(enviroment);
+            if(value instanceof ClassInstance)
+                return ((ClassInstance)value).get(name);
+            throw new ParserError();
+        }
+    }
+
+    static class Set extends Expression{
+
+        final Get getInstance;
+        final Expression expression;
+        Set(Get getInstance, Expression expression)
+        {
+            this.expression = expression;
+            this.getInstance = getInstance;
+
+        }
+
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Object object = getInstance.expression.doAction(enviroment);
+            if(!(object instanceof ClassInstance))
+                throw new ParserError();
+            Object value = expression.doAction(enviroment);
+            ((ClassInstance)object).set(getInstance.name, value);
+            return null;
+        }
+    }
+
     static class MathExpression3Arg extends Expression{
 
         final Expression expression1, expression2, expression3;
@@ -530,6 +573,34 @@ public class Expression implements ActionListener {
                     return Math.log((double)expression.doAction(enviroment));
             }
             return null;
+        }
+    }
+
+    static class This extends Expression{
+
+        Token value;
+
+        public This(Token value)
+        {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value.toString();
+        }
+
+
+        @Override
+        public boolean isNotNull() {
+            if(value!=null )
+                return true;
+            return false;
+        }
+
+        @Override
+        public Object doAction( Enviroment enviroment) {
+            return enviroment.get(value);
         }
     }
 

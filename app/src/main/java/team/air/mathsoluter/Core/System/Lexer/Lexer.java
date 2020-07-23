@@ -37,6 +37,8 @@ public class Lexer {
         keywords.put("int_", Token.TokenType.INTEGRAL);
         keywords.put("infty", Token.TokenType.INFINITY);
         keywords.put("mathrm", Token.TokenType.MATHTHERM);
+        keywords.put("class", Token.TokenType.CLASS);
+        keywords.put("this", Token.TokenType.THIS);
     }
 
     int current = 0;
