@@ -67,10 +67,12 @@ public class Token {
         VAR,
         RETURN,
         FUNCTION,
+        CLASS,
         COMMENT,
         END_OF_LINE,
         PRINT,
         CAP,
+        THIS,
 
         ALPHA,
         ALPHA_CAPITAL,

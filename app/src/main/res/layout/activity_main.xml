@@ -41,6 +41,7 @@
         android:orientation="horizontal">
 
         <katex.hourglass.in.mathlib.MathView
+            android:id="@+id/math"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

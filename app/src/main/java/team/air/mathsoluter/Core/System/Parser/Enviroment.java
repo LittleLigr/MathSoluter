@@ -34,6 +34,9 @@ public class Enviroment {
     public Enviroment(Enviroment enviroment)
     {this.master=enviroment;}
 
+    public Enviroment(Map <String, Object> values)
+    {this.values = values;
+    master=null;}
 
     public void define(String name, Object value) {
         values.put(name, value);
