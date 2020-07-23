@@ -11,12 +11,12 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/btnPassData"
             android:layout_margin="16dp"
-            android:hint="Enter here" />
+            android:hint="Введите выражение" />
         <Button
             android:id="@+id/btnPassData"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="PASS DATA TO FRAGMENT TWO" />
+            android:text="Ввод" />
     </RelativeLayout>
 </ScrollView>

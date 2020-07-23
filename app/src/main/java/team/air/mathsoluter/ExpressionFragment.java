@@ -16,20 +16,22 @@ import team.air.mathsoluter.Core.System.SharedViewModel;
 
 public class ExpressionFragment extends Fragment {
 
-    private ExpressionViewModel mViewModel;
-
-    public static ExpressionFragment newInstance() {
-        return new ExpressionFragment();
-    }
+    private MathView katex;
+    public ExpressionFragment(){}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.expression_fragment, container, false);
-        SharedViewModel model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-        //model.getText().observe(this , );
-        return view;
+        return inflater.inflate(R.layout.expression_fragment, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        katex = view.findViewById(R.id.math);
+    }
+    void displayReceivedData(String message) {
+        katex.setDisplayText("$"+message+"$");
+    }
 
 }
