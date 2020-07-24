@@ -313,9 +313,23 @@ public class Parser {
 
     Expression multiplication()
     {
-        Expression expr = unary();
+        Expression expr = pow();
 
         while(match(Token.TokenType.STAR, Token.TokenType.SLASH))
+        {
+            Token operator = previous();
+            Expression right = pow();
+            expr = new Expression.Binary(expr, operator, right);
+        }
+
+        return  expr;
+    }
+
+    Expression pow()
+    {
+        Expression expr = unary();
+
+        while(match(Token.TokenType.CAP))
         {
             Token operator = previous();
             Expression right = unary();

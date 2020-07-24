@@ -179,6 +179,11 @@ public class Expression implements ActionListener {
                         if(isString(right))
                             return left.toString().length()>right.toString().length();
                 }
+                case CAP:{
+                    if(isNumerical(left))
+                        if(isNumerical(right))
+                            return Math.pow((double)left, (double)right);
+                }
 
             }
             throw new ParserError();
