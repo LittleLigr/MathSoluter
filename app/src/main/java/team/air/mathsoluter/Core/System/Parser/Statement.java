@@ -1,5 +1,7 @@
 package team.air.mathsoluter.Core.System.Parser;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +27,17 @@ public class Statement implements ActionListener{
 
     static class PrintStatement extends Statement
     {
-
-        public PrintStatement(Expression expression) {
+        TextView consoleOutput;
+        public PrintStatement(Expression expression, TextView consoleOutput) {
             super(expression);
+            this.consoleOutput=consoleOutput;
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
             Object value = expression.doAction(enviroment);
             System.out.println(value.toString());
+            consoleOutput.setText(consoleOutput.getText()+"\n"+value);
             return null;
         }
     }

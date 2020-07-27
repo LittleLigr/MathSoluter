@@ -1,5 +1,7 @@
 package team.air.mathsoluter.Core.System.Parser;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 import team.air.mathsoluter.Core.System.Token;
@@ -9,12 +11,15 @@ public class Parser {
     int id = 0;
     ArrayList<Token> tokens;
 
+    TextView consoleOutput;
+
     public Parser(ArrayList<Token> tokens)
     {
         this.tokens = tokens;
     }
 
-    public ArrayList<Statement> parse() {
+    public ArrayList<Statement> parse(TextView consoleOutput) {
+        this.consoleOutput=consoleOutput;
         ArrayList<Statement> statements = new ArrayList<>();
         while (isNoEnd()) {
             Statement decl = declaration();
@@ -182,7 +187,7 @@ public class Parser {
     private Statement printStatement() {
         Expression value = expression();
         consume(Token.TokenType.END_OF_LINE, "Expect ';' after value.");
-        return new Statement.PrintStatement(value);
+        return new Statement.PrintStatement(value, consoleOutput);
     }
 
     private Statement expressionStatement() {
