@@ -16,11 +16,11 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity  {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         TabLayout tabLayout = findViewById(R.id.tabBar);
         TabItem tabSoript = findViewById(R.id.scriptId);
@@ -66,6 +66,42 @@ public class MainActivity extends AppCompatActivity  {
             sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             tabLayout.getTabAt(i).setText(sb);
         }
+
+        TextView v = (TextView)findViewById(R.id.editText);
+
+
+        v.setText("class Bagel{\n" +
+                " call()" +
+                "{\n" +
+                "print this;\n" +
+                "}\n" +
+                "}" +
+                "var bagel = Bagel().call;\n" +
+                "print bagel();");
+        //System.out.println(v.getText());
+    }
+
+    public void click(View view)
+    {
+        MathView m = (MathView)findViewById(R.id.math);
+
+        TextView v = (TextView)findViewById(R.id.editText);
+        m.setDisplayText(v.getText().toString());
+
+        String simpson = "function simpson(a,b,n,func,dvar)" +
+                "{" +
+                "h = (b-a)/n;" +
+                "k1 = 0;" +
+                "k2=0;" +
+                "for(i=1;i<n;i=i+h)" +
+                "{" +
+                "k1 = k1 + func(dvar = 1);" +
+                "k2 = k2 + func(dvar = 2);" +
+                "}" +
+                "return h/3*(func(dvar=a)+4*k1+2*k2);" +
+                "}";
+
+        new Interpretator().interpret(new Parser(new Lexer().lex(v.getText().toString())).parse());
     }
 }
 
