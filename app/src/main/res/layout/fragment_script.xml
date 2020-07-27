@@ -11,15 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Ввод выражения" />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Введите скрипт"
-        android:id="@+id/editText"></EditText>
+
+        <EditText
+            android:id="@+id/scriptTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Введите скрипт"></EditText>
     <katex.hourglass.in.mathlib.MathView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
