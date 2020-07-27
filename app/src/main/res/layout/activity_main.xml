@@ -1,52 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/AppWhiteColor"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <android.support.design.widget.TabLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        tools:ignore="MissingConstraints"
-        android:id="@+id/tabBar"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginRight="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="wrap_content"
+        android:background="@color/AppDarkBlueColor"
+        android:orientation="horizontal">
 
-        <android.support.design.widget.TabItem
+        <LinearLayout
+            android:id="@+id/control_panel"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/playview" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/stopview" />
+
+        </LinearLayout>
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabBar"
+            style="@style/MyCustomTabLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/scriptId"
-            android:text="Script">
-        <ImageView android:background="@drawable/errorview" />
-        </android.support.design.widget.TabItem>
+            android:layout_marginStart="1dp"
 
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:id="@+id/consoleId"
-            android:layout_height="wrap_content"
-            android:text="Console"/>
+            android:layout_marginEnd="1dp"
+            android:layout_weight="1"
+            android:background="@color/AppDarkBlueColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorColor="@color/AppOrangeColor"
+            app:tabTextColor="@color/AppBlueColor"
+            tools:ignore="MissingConstraints">
 
-        <android.support.design.widget.TabItem
-            android:layout_width="wrap_content"
-            android:id="@+id/sourceId"
-            android:layout_height="wrap_content"
-            android:text="Source code"/>
+            <android.support.design.widget.TabItem
+                android:id="@+id/scriptId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#98D7D1"
+                android:text="      Script      ">
 
 
-    </android.support.design.widget.TabLayout>
+            </android.support.design.widget.TabItem>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/consoleId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Console" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/sourceId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Source code" />
+
+
+        </android.support.design.widget.TabLayout>
+
+    </LinearLayout>
+
+
 
     <android.support.v4.view.ViewPager
-        android:layout_width="0dp"
         android:id="@+id/viewPager"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         tools:ignore="MissingConstraints" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>
