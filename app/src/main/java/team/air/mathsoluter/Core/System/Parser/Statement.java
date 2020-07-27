@@ -1,6 +1,10 @@
 package team.air.mathsoluter.Core.System.Parser;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import team.air.mathsoluter.Core.System.Token;
 
@@ -23,15 +27,17 @@ public class Statement implements ActionListener{
 
     static class PrintStatement extends Statement
     {
-
-        public PrintStatement(Expression expression) {
+        TextView consoleOutput;
+        public PrintStatement(Expression expression, TextView consoleOutput) {
             super(expression);
+            this.consoleOutput=consoleOutput;
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
             Object value = expression.doAction(enviroment);
             System.out.println(value.toString());
+            consoleOutput.setText(consoleOutput.getText()+"\n"+value);
             return null;
         }
     }
@@ -142,6 +148,29 @@ public class Statement implements ActionListener{
             return null;
         }
     }
+
+    static class ClassStatement extends Statement
+    {
+        final ArrayList<FunctionStatement> functionStatements;
+        final Token name;
+
+        public ClassStatement(Token name, ArrayList<FunctionStatement> functionStatements) {
+            this.functionStatements = functionStatements;
+            this.name = name;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            Map<String, Function> methods = new HashMap<>();
+            for (Statement.FunctionStatement method : functionStatements) {
+                Function function = new Function(method, enviroment);
+                methods.put(method.name.lexeme, function);
+            }
+            enviroment.define(name.lexeme, new Class(name.lexeme, methods));
+            return null;
+        }
+    }
+
 
     static class UserExpressionStatement extends Statement
     {

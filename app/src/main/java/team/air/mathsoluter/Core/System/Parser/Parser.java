@@ -1,7 +1,8 @@
 package team.air.mathsoluter.Core.System.Parser;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import team.air.mathsoluter.Core.System.Token;
 
@@ -10,12 +11,15 @@ public class Parser {
     int id = 0;
     ArrayList<Token> tokens;
 
+    TextView consoleOutput;
+
     public Parser(ArrayList<Token> tokens)
     {
         this.tokens = tokens;
     }
 
-    public ArrayList<Statement> parse() {
+    public ArrayList<Statement> parse(TextView consoleOutput) {
+        this.consoleOutput=consoleOutput;
         ArrayList<Statement> statements = new ArrayList<>();
         while (isNoEnd()) {
             Statement decl = declaration();
@@ -41,6 +45,7 @@ public class Parser {
     private Statement declaration()
     {
         try {
+            if (match(Token.TokenType.CLASS)) return classDeclaration();
             if(match(Token.TokenType.FUNCTION)) return functionStatement("function");
             if(match(Token.TokenType.DOG_SYMBOL)) return undefinedExpression();
             if(match(Token.TokenType.VAR))return varDeclaration();
@@ -61,6 +66,21 @@ public class Parser {
         }
         consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
         return new Statement.UserExpressionStatement(name, body);
+    }
+
+    private Statement.ClassStatement classDeclaration()
+    {
+        Token name = consume(Token.TokenType.IDENTIFIER, "expect class name");
+        consume(Token.TokenType.BRACE_BRACKET_OPEN, "expect {");
+        ArrayList<Statement.FunctionStatement> functions = new ArrayList<>();
+
+        while(!check(Token.TokenType.BRACE_BRACKET_CLOSE)&& isNoEnd())
+        {
+            functions.add(functionStatement("function"));
+        }
+
+        consume(Token.TokenType.BRACE_BRACKET_CLOSE, "expect }");
+        return new Statement.ClassStatement(name, functions);
     }
 
     private Statement varDeclaration() {
@@ -167,7 +187,7 @@ public class Parser {
     private Statement printStatement() {
         Expression value = expression();
         consume(Token.TokenType.END_OF_LINE, "Expect ';' after value.");
-        return new Statement.PrintStatement(value);
+        return new Statement.PrintStatement(value, consoleOutput);
     }
 
     private Statement expressionStatement() {
@@ -220,6 +240,11 @@ public class Parser {
             if (expr instanceof Expression.Variable) {
                 Token name = ((Expression.Variable)expr).value;
                 return new Expression.Assign(name, value);
+            }
+            else if(expr instanceof Expression.Get)
+            {
+                Expression.Get _get = (Expression.Get)expr;
+                return new Expression.Set(_get, value);
             }
         }
         return expr;
@@ -293,9 +318,23 @@ public class Parser {
 
     Expression multiplication()
     {
-        Expression expr = unary();
+        Expression expr = pow();
 
         while(match(Token.TokenType.STAR, Token.TokenType.SLASH))
+        {
+            Token operator = previous();
+            Expression right = pow();
+            expr = new Expression.Binary(expr, operator, right);
+        }
+
+        return  expr;
+    }
+
+    Expression pow()
+    {
+        Expression expr = unary();
+
+        while(match(Token.TokenType.CAP))
         {
             Token operator = previous();
             Expression right = unary();
@@ -322,8 +361,12 @@ public class Parser {
         {
             if(match(Token.TokenType.OPERATOR_BRACKET_OPEN))
                 expr = finishCall(expr);
-            else
-                break;
+            else if(match(Token.TokenType.DOT))
+            {
+                Token name = consume(Token.TokenType.IDENTIFIER, "expect var name");
+                expr = new Expression.Get(expr,name);
+            }
+            else break;
         }
 
         return expr;
@@ -361,6 +404,8 @@ public class Parser {
 
         if (match(Token.TokenType.NUMERICAL, Token.TokenType.STRING))
             return new Expression.Literal(previous().literal);
+
+        if (match(Token.TokenType.THIS)) return new Expression.This(previous());
 
         if (match(Token.TokenType.IDENTIFIER))
             return new Expression.Variable(previous());

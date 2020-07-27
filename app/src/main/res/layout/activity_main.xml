@@ -1,56 +1,95 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    >
+    android:background="@color/AppWhiteColor"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/AppDarkBlueColor"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/button"
+        <LinearLayout
+            android:id="@+id/control_panel"
             android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/startScript"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="click"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/playview" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/stopview" />
+
+        </LinearLayout>
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabBar"
+            style="@style/MyCustomTabLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button"
-            android:onClick="click"
-            tools:layout_editor_absoluteX="242dp"
-            tools:layout_editor_absoluteY="230dp" />
+            android:layout_marginStart="1dp"
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="wrap_content"
-            android:layout_height="299dp"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="231dp" />
+            android:layout_marginEnd="1dp"
+            android:layout_weight="1"
+            android:background="@color/AppDarkBlueColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorColor="@color/AppOrangeColor"
+            app:tabTextColor="@color/AppBlueColor"
+            tools:ignore="MissingConstraints">
 
+            <android.support.design.widget.TabItem
+                android:id="@+id/scriptId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#98D7D1"
+                android:text="      Script      ">
+
+
+            </android.support.design.widget.TabItem>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/consoleId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Console" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/sourceId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Source code" />
+        </android.support.design.widget.TabLayout>
 
 
     </LinearLayout>
 
-    <LinearLayout
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <katex.hourglass.in.mathlib.MathView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:setClickable="true"
-            app:setText="@string/app_name"
-            app:setTextColor="@color/colorPrimary"
-            app:setTextSize="14sp" />
-
-    </LinearLayout>
-
-
+        tools:ignore="MissingConstraints" />
 
 </LinearLayout>
