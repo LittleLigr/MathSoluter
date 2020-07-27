@@ -13,6 +13,11 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.View;
+import android.widget.TextView;
+
+import team.air.mathsoluter.Core.System.Lexer.Lexer;
+import team.air.mathsoluter.Core.System.Parser.Interpretator;
+import team.air.mathsoluter.Core.System.Parser.Parser;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -25,7 +30,7 @@ public class MainActivity extends AppCompatActivity  {
         TabLayout tabLayout = findViewById(R.id.tabBar);
         TabItem tabSoript = findViewById(R.id.scriptId);
         TabItem tabConsole = findViewById(R.id.consoleId);
-        TabItem tabSource = findViewById(R.id.sourceId);
+        final TabItem tabSource = findViewById(R.id.sourceId);
 
         final ViewPager viewPager = findViewById(R.id.viewPager);
 
@@ -36,6 +41,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+
             }
 
             @Override
@@ -45,7 +51,9 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                if(viewPager.getCurrentItem()==2)
+                    findViewById(R.id.startScript).setEnabled(false);
+                else findViewById(R.id.startScript).setEnabled(true);
             }
         });
 
@@ -67,41 +75,14 @@ public class MainActivity extends AppCompatActivity  {
             tabLayout.getTabAt(i).setText(sb);
         }
 
-        TextView v = (TextView)findViewById(R.id.editText);
 
-
-        v.setText("class Bagel{\n" +
-                " call()" +
-                "{\n" +
-                "print this;\n" +
-                "}\n" +
-                "}" +
-                "var bagel = Bagel().call;\n" +
-                "print bagel();");
-        //System.out.println(v.getText());
     }
 
     public void click(View view)
     {
-        MathView m = (MathView)findViewById(R.id.math);
-
-        TextView v = (TextView)findViewById(R.id.editText);
-        m.setDisplayText(v.getText().toString());
-
-        String simpson = "function simpson(a,b,n,func,dvar)" +
-                "{" +
-                "h = (b-a)/n;" +
-                "k1 = 0;" +
-                "k2=0;" +
-                "for(i=1;i<n;i=i+h)" +
-                "{" +
-                "k1 = k1 + func(dvar = 1);" +
-                "k2 = k2 + func(dvar = 2);" +
-                "}" +
-                "return h/3*(func(dvar=a)+4*k1+2*k2);" +
-                "}";
-
-        new Interpretator().interpret(new Parser(new Lexer().lex(v.getText().toString())).parse());
+        TextView v = (TextView)findViewById(R.id.scriptTextView);
+        TextView console = (TextView)findViewById(R.id.consoleTextView);
+        new Interpretator().interpret(new Parser(new Lexer().lex(v.getText().toString())).parse(console));
     }
 }
 
