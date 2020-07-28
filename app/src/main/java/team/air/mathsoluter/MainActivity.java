@@ -74,8 +74,6 @@ public class MainActivity extends AppCompatActivity  {
             sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             tabLayout.getTabAt(i).setText(sb);
         }
-
-
     }
 
     public void click(View view)
