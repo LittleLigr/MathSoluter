@@ -442,7 +442,7 @@ public class Expression implements ActionListener {
                 Function function = ((Class) value).findMethod(name.lexeme);
                 if(function!=null)
                     if(function.declaration.isStatic)
-                        return function;
+                        return new Function(function.declaration,new Enviroment());
             }
 
             throw new ParserError();
