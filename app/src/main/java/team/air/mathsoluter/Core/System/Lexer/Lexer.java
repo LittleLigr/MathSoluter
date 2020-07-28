@@ -39,6 +39,7 @@ public class Lexer {
         keywords.put("mathrm", Token.TokenType.MATHTHERM);
         keywords.put("class", Token.TokenType.CLASS);
         keywords.put("this", Token.TokenType.THIS);
+        keywords.put("static", Token.TokenType.STATIC);
     }
 
     int current = 0;

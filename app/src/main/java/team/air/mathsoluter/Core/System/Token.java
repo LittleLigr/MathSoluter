@@ -73,6 +73,7 @@ public class Token {
         PRINT,
         CAP,
         THIS,
+        STATIC,
 
         ALPHA,
         ALPHA_CAPITAL,

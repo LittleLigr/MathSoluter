@@ -437,6 +437,14 @@ public class Expression implements ActionListener {
             Object value = expression.doAction(enviroment);
             if(value instanceof ClassInstance)
                 return ((ClassInstance)value).get(name);
+            else if(value instanceof Class)
+            {
+                Function function = ((Class) value).findMethod(name.lexeme);
+                if(function!=null)
+                    if(function.declaration.isStatic)
+                        return function;
+            }
+
             throw new ParserError();
         }
     }

@@ -209,6 +209,11 @@ public class Parser {
 
     private Statement.FunctionStatement functionStatement(String name)
     {
+        boolean isStatic = false;
+
+        if(match(Token.TokenType.STATIC))
+            isStatic=true;
+
         Token funcName = consume(Token.TokenType.IDENTIFIER, "Expect "+name+" function");
         consume(Token.TokenType.OPERATOR_BRACKET_OPEN, "expect (");
 
@@ -223,7 +228,7 @@ public class Parser {
         consume(Token.TokenType.OPERATOR_BRACKET_CLOSE, "expect )");
         consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' before " + name + " body.");
         ArrayList<Statement> body = block();
-        return new Statement.FunctionStatement(funcName, parameters, body);
+        return new Statement.FunctionStatement(funcName, parameters, body, isStatic);
     }
 
     Expression expression() {
