@@ -39,6 +39,7 @@ public class Lexer {
         keywords.put("mathrm", Token.TokenType.MATHTHERM);
         keywords.put("class", Token.TokenType.CLASS);
         keywords.put("this", Token.TokenType.THIS);
+        keywords.put("static", Token.TokenType.STATIC);
     }
 
     int current = 0;
@@ -65,6 +66,12 @@ public class Lexer {
     {
         char c = next();
         switch (c) {
+            case ' ':
+            case '\r':
+            case '\t':
+                // Ignore whitespace.
+                break;
+
             case '(': addToken(Token.TokenType.OPERATOR_BRACKET_OPEN); break;
             case ')': addToken(Token.TokenType.OPERATOR_BRACKET_CLOSE); break;
             case '{': addToken(Token.TokenType.BRACE_BRACKET_OPEN); break;
@@ -94,11 +101,6 @@ public class Lexer {
             case '\\':
                 addToken(Token.TokenType.BACK_SLASH); break;
 
-            case ' ':
-                case '\r':
-                case '\t':
-                // Ignore whitespace.
-                break;
 
                 case '\n':
                     line++;

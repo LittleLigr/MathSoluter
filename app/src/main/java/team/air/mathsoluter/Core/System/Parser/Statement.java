@@ -134,11 +134,13 @@ public class Statement implements ActionListener{
         final ArrayList<Token> arguments;
         final Token name;
         final BlockStatement body;
+        final boolean isStatic;
 
-        public FunctionStatement(Token name, ArrayList<Token> arguments, ArrayList<Statement> body) {
+        public FunctionStatement(Token name, ArrayList<Token> arguments, ArrayList<Statement> body, boolean isStatic) {
             this.arguments = arguments;
             this.body = new BlockStatement(body);
             this.name = name;
+            this.isStatic = isStatic;
         }
 
         @Override
@@ -164,6 +166,8 @@ public class Statement implements ActionListener{
             Map<String, Function> methods = new HashMap<>();
             for (Statement.FunctionStatement method : functionStatements) {
                 Function function = new Function(method, enviroment);
+                if(method.isStatic && method.name.lexeme.equals("init"))
+                    throw new ParserError();
                 methods.put(method.name.lexeme, function);
             }
             enviroment.define(name.lexeme, new Class(name.lexeme, methods));

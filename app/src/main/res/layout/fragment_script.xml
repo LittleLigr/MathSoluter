@@ -12,11 +12,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
+        <team.air.mathsoluter.Core.Util.NumberedEditText
             android:id="@+id/scriptTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Введите скрипт"></EditText>
+            android:hint="Введите скрипт"
+            android:paddingLeft="30dp"
+            android:textAlignment="viewStart"
+            android:textSize="25sp" />
+
     <katex.hourglass.in.mathlib.MathView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
