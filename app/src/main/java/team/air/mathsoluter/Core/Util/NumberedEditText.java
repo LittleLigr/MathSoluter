@@ -31,38 +31,8 @@ public class NumberedEditText extends android.support.v7.widget.AppCompatEditTex
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
 
-        if(text.length()>0&&flag==false)
-        {
-            if(text.subSequence(start,start+1).toString().equals("{"))
-                tabCount++;
-            if(text.subSequence(start,start+1).toString().equals("}"))
-            {
-                if(text.length()>1)
-                {
-                    if (start!=0)
-                        if(getText().subSequence(start-1, start).toString().equals("\t"))
-                        {
-                            flag=true;
-                            setText(getText().replace(start-1, start, ""));
-                            setSelection(start);
-                        }
-                }
-                if(tabCount>1)
-                    tabCount--;
-            }
-            if(text.subSequence(start,start+1).toString().equals("\n"))
-                for(int i = 0; i < tabCount; i++)
-                {
-                    flag = true;
-                    setText(getText().insert(start+1, "\t"));
-                    setSelection(start+i+1);
-                }
-            flag=false;
-        }
-
-
-
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {

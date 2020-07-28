@@ -9,10 +9,15 @@ import team.air.mathsoluter.Core.System.Token;
 public class Class implements FunctionListener {
     final String name;
     final Map<String,Function> functions;
+    final int argCount;
     Class(String name,Map<String,Function> functions)
     {
         this.name = name;
         this.functions=functions;
+        Function init = findMethod("init");
+        if(init!=null)
+            argCount = init.arg();
+        else argCount=0;
     }
 
     Function findMethod(String name)
@@ -31,12 +36,12 @@ public class Class implements FunctionListener {
 
     @Override
     public Object call(Enviroment enviroment, ArrayList<Object> arguments) {
-        return new ClassInstance(this);
+        return new ClassInstance(this, arguments);
     }
 
     @Override
     public int arg() {
-        return 0;
+        return argCount;
     }
 }
 
@@ -45,10 +50,14 @@ class ClassInstance
     private Class classDescription;
     private final Map<String, Object> fields = new HashMap<>();
 
-    ClassInstance(Class classDescription)
+    ClassInstance(Class classDescription, ArrayList<Object> arguments)
     {
         this.classDescription = classDescription;
         fields.put("this", this);
+        Function init = classDescription.findMethod("init");
+        if(init!=null)
+                init.call(new Enviroment(fields), arguments);
+        else throw new ParserError();
     }
     public Object get(Token name)
     {
