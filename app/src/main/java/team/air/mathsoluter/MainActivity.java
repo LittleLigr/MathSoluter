@@ -13,6 +13,8 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import team.air.mathsoluter.Core.System.Lexer.Lexer;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity  {
         final TabItem tabSource = findViewById(R.id.sourceId);
 
         final ViewPager viewPager = findViewById(R.id.viewPager);
+
 
         PagerAdapter pagerAdapter =
                 new PagerAdapter(getSupportFragmentManager() , tabLayout.getTabCount());
@@ -82,6 +85,7 @@ public class MainActivity extends AppCompatActivity  {
         TextView console = (TextView)findViewById(R.id.consoleTextView);
         new Interpretator().interpret(new Parser(new Lexer().lex(v.getText().toString())).parse(console));
     }
+
 }
 
 

@@ -59,13 +59,7 @@ public class Parser {
 
     private Statement undefinedExpression()
     {
-        Token name = consume(Token.TokenType.IDENTIFIER, "Expect variable name.");
-        Statement body = null;
-        if (match(Token.TokenType.EQUAL)) {
-            body = new Statement.ReturnStatement(expression());
-        }
-        consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
-        return new Statement.UserExpressionStatement(name, body);
+        return  null;
     }
 
     private Statement.ClassStatement classDeclaration()
@@ -91,8 +85,17 @@ public class Parser {
             initializer = expression();
         }
 
+        Statement.BlockStatement setter=null, getter=null;
+        if(match(Token.TokenType.COLON))
+        {
+            if(match(Token.TokenType.SET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                setter = new Statement.BlockStatement(block());
+            if(match(Token.TokenType.GET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                getter = new Statement.BlockStatement(block());
+        }
+
         consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
-        return new Statement.VarStatement(name, initializer);
+        return new Statement.VarStatement(name, initializer, setter, getter);
     }
 
     private Statement statement() {

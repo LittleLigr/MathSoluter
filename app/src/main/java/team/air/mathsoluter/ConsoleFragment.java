@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,12 +19,14 @@ public class ConsoleFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     public ConsoleFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -44,6 +47,8 @@ public class ConsoleFragment extends Fragment {
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,9 +59,20 @@ public class ConsoleFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        final View thisView = inflater.inflate(R.layout.fragment_console,container, false);
+        thisView.findViewById(R.id.clearConsoleButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView textView = thisView.findViewById(R.id.consoleTextView);
+                textView.setText("");
+            }
+        });
+
         return inflater.inflate(R.layout.fragment_console, container, false);
     }
+
+
 }

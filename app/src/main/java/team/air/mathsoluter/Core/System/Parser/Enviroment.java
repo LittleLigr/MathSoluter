@@ -43,8 +43,19 @@ public class Enviroment {
     }
 
     public Object get(Token name) {
-        if(values.containsKey(name.lexeme))
-            return values.get(name.lexeme);
+        Object var = values.get(name.lexeme);
+        if(var!=null)
+        {
+            if(var instanceof Variable)
+            {
+                Variable variable = (Variable) var;
+                return variable.get();
+            }
+           else
+            {
+                return var;
+            }
+        }
         if (master != null) return master.get(name);
         else if(global.contain(name)) return global.get(name);
         throw new ParserError();
@@ -58,9 +69,20 @@ public class Enviroment {
     }
 
     void assign(Token name, Object value) {
-        if (values.containsKey(name.lexeme)) {
-            values.put(name.lexeme, value);
-            return;
+
+        if(values.containsKey(name.lexeme)){
+            Object var = values.get(name.lexeme);
+            if(var instanceof Variable)
+            {
+                Variable variable = (Variable) var;
+                variable.set(value);
+                return;
+            }
+            else {
+                values.put(name.lexeme, value);
+                return;
+            }
+
         }
 
         if (master != null) {

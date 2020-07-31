@@ -59,9 +59,12 @@ public class Statement implements ActionListener{
     static class VarStatement extends Statement
     {
         final Token name;
-        public VarStatement(Token name, Expression expression) {
+        final BlockStatement setter , getter;
+        public VarStatement(Token name, Expression expression, BlockStatement setter, BlockStatement getter) {
             super(expression);
             this.name = name;
+            this.setter = setter;
+            this.getter = getter;
         }
 
         @Override
@@ -69,23 +72,22 @@ public class Statement implements ActionListener{
             Object value = null;
             if(expression!=null)
                 value = expression.doAction(enviroment);
-            enviroment.define(name.lexeme, value);
+            enviroment.define(name.lexeme, new Variable(value, setter, getter));
             return null;
         }
     }
 
     static class WhileStatement extends Statement
     {
-        final Expression condition;
         final Statement body;
         public WhileStatement(Expression condition, Statement body) {
-            this.condition = condition;
+            super(condition);
             this.body = body;
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
-            while ((boolean)condition.doAction(enviroment)==true)
+            while ((boolean)expression.doAction(enviroment)==true)
                 body.doAction(enviroment);
             return null;
         }
@@ -93,17 +95,16 @@ public class Statement implements ActionListener{
 
     static class IfStatement extends Statement
     {
-        final Expression condition;
         final Statement thenBranch, elseBranch;
         public IfStatement(Expression condition,  Statement thenBranch, Statement elseBranch) {
-            this.condition = condition;
+            super(condition);
             this.thenBranch = thenBranch;
             this.elseBranch = elseBranch;
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
-            Object cond = condition.doAction(enviroment);
+            Object cond = expression.doAction(enviroment);
            if(cond!=null&&(boolean)cond==true)
                thenBranch.doAction(enviroment);
            else if(elseBranch!=null)
@@ -178,17 +179,14 @@ public class Statement implements ActionListener{
 
     static class UserExpressionStatement extends Statement
     {
-        final Token name;
-        final  Statement body;
-        public UserExpressionStatement(Token name, Statement body) {
-          this.body = body;
-          this.name = name;
+        public UserExpressionStatement(Expression body) {
+          super(body);
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
-            enviroment.define(name.lexeme, new UserExpressionFunction(this));
-            return null;
+            return expression.doAction(enviroment);
+
         }
     }
 

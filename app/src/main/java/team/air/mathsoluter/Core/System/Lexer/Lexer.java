@@ -39,6 +39,8 @@ public class Lexer {
         keywords.put("mathrm", Token.TokenType.MATHTHERM);
         keywords.put("class", Token.TokenType.CLASS);
         keywords.put("this", Token.TokenType.THIS);
+        keywords.put("set", Token.TokenType.SET);
+        keywords.put("get", Token.TokenType.GET);
         keywords.put("static", Token.TokenType.STATIC);
     }
 
@@ -82,6 +84,7 @@ public class Lexer {
             case '+': addToken(Token.TokenType.PLUS); break;
             case '^': addToken(Token.TokenType.CAP); break;
             case '*': addToken(Token.TokenType.STAR); break;
+            case ':': addToken(Token.TokenType.COLON); break;
             case '!': addToken(match('=') ? Token.TokenType.BANG_EQUAL : Token.TokenType.BANG); break;
             case '=': addToken(match('=') ? Token.TokenType.EQUAL_EQUAL : Token.TokenType.EQUAL); break;
             case '<': addToken(match('=') ? Token.TokenType.LESS_EQUAL : Token.TokenType.LESS); break;
