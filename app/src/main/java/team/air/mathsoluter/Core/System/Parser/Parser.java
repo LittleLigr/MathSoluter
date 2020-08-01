@@ -92,6 +92,8 @@ public class Parser {
                 setter = new Statement.BlockStatement(block());
             if(match(Token.TokenType.GET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
                 getter = new Statement.BlockStatement(block());
+            if(match(Token.TokenType.SET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                setter = new Statement.BlockStatement(block());
         }
 
         consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
