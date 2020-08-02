@@ -13,7 +13,6 @@ public class UserExpressionFunction implements FunctionListener {
     @Override
     public Object call(Enviroment enviroment, ArrayList<Object> arguments) {
 
-      
         return null;
     }
 

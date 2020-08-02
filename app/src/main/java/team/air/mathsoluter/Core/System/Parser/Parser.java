@@ -47,7 +47,6 @@ public class Parser {
         try {
             if (match(Token.TokenType.CLASS)) return classDeclaration();
             if(match(Token.TokenType.FUNCTION)) return functionStatement("function");
-            if(match(Token.TokenType.DOG_SYMBOL)) return undefinedExpression();
             if(match(Token.TokenType.VAR))return varDeclaration();
             return statement();
         }
@@ -55,11 +54,6 @@ public class Parser {
         {
             return null;
         }
-    }
-
-    private Statement undefinedExpression()
-    {
-        return  null;
     }
 
     private Statement.ClassStatement classDeclaration()
@@ -407,6 +401,8 @@ public class Parser {
             consume(Token.TokenType.BRACE_BRACKET_CLOSE, "expect }");
             return expression;
         }
+
+        if(match(Token.TokenType.DOG_SYMBOL)) return new Expression.MathExpression(addition());
 
         if (match(Token.TokenType.FALSE)) return new Expression.Literal(false);
         if (match(Token.TokenType.TRUE)) return new Expression.Literal(true);

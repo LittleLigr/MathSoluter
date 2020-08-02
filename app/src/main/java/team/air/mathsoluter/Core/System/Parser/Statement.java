@@ -179,9 +179,7 @@ public class Statement implements ActionListener{
 
     static class UserExpressionStatement extends Statement
     {
-
         static int counter = 0;
-
         public UserExpressionStatement(Expression body, ArrayList<Token> vars) {
           super(body);
         // HashMap<String, Function> functions = new HashMap<>();
@@ -214,18 +212,6 @@ public class Statement implements ActionListener{
         }
     }
 
-    static class MathStatement extends Statement
-    {
-        final ArrayList<Statement> statements;
 
-        public MathStatement(ArrayList<Statement> statements) {
-            this.statements = statements;
-        }
-
-        @Override
-        public Object doAction(Enviroment enviroment) {
-            return null;
-        }
-    }
 
 }

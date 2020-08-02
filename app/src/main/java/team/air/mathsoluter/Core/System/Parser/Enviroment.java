@@ -38,6 +38,10 @@ public class Enviroment {
     {this.values = values;
     master=null;}
 
+    public Enviroment(Enviroment enviroment,Map <String, Object> values)
+    {this.values = values;
+        master=enviroment;}
+
     public void define(String name, Object value) {
         values.put(name, value);
     }
