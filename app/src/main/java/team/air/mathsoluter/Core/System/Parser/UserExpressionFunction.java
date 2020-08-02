@@ -13,23 +13,6 @@ public class UserExpressionFunction implements FunctionListener {
     @Override
     public Object call(Enviroment enviroment, ArrayList<Object> arguments) {
 
-        Enviroment env = new Enviroment(enviroment);
-        for (int i = 0; i < arguments.size(); i++)
-        {
-            Expression.Assign assign = ((Expression.Assign)arguments.get(i));
-            Statement.VarStatement varStatement= new Statement.VarStatement(assign.name, assign.expression);
-            varStatement.doAction(env);
-        }
-
-        try
-        {
-            declaration.body.doAction(env);
-        }
-        catch (Return value)
-        {
-            return value.value;
-        }
-
         return null;
     }
 

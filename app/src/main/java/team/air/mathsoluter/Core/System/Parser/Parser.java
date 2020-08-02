@@ -47,7 +47,6 @@ public class Parser {
         try {
             if (match(Token.TokenType.CLASS)) return classDeclaration();
             if(match(Token.TokenType.FUNCTION)) return functionStatement("function");
-            if(match(Token.TokenType.DOG_SYMBOL)) return undefinedExpression();
             if(match(Token.TokenType.VAR))return varDeclaration();
             return statement();
         }
@@ -55,17 +54,6 @@ public class Parser {
         {
             return null;
         }
-    }
-
-    private Statement undefinedExpression()
-    {
-        Token name = consume(Token.TokenType.IDENTIFIER, "Expect variable name.");
-        Statement body = null;
-        if (match(Token.TokenType.EQUAL)) {
-            body = new Statement.ReturnStatement(expression());
-        }
-        consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
-        return new Statement.UserExpressionStatement(name, body);
     }
 
     private Statement.ClassStatement classDeclaration()
@@ -91,8 +79,19 @@ public class Parser {
             initializer = expression();
         }
 
+        Statement.BlockStatement setter=null, getter=null;
+        if(match(Token.TokenType.COLON))
+        {
+            if(match(Token.TokenType.SET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                setter = new Statement.BlockStatement(block());
+            if(match(Token.TokenType.GET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                getter = new Statement.BlockStatement(block());
+            if(match(Token.TokenType.SET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                setter = new Statement.BlockStatement(block());
+        }
+
         consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
-        return new Statement.VarStatement(name, initializer);
+        return new Statement.VarStatement(name, initializer, setter, getter);
     }
 
     private Statement statement() {
@@ -402,6 +401,8 @@ public class Parser {
             consume(Token.TokenType.BRACE_BRACKET_CLOSE, "expect }");
             return expression;
         }
+
+        if(match(Token.TokenType.DOG_SYMBOL)) return new Expression.MathExpression(addition());
 
         if (match(Token.TokenType.FALSE)) return new Expression.Literal(false);
         if (match(Token.TokenType.TRUE)) return new Expression.Literal(true);

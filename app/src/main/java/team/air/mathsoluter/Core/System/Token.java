@@ -74,6 +74,9 @@ public class Token {
         CAP,
         THIS,
         STATIC,
+        SET,
+        GET,
+        COLON,
 
         ALPHA,
         ALPHA_CAPITAL,
