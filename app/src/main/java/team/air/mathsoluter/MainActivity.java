@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity  {
         TabItem tabScript = findViewById(R.id.scriptId);
         TabItem tabConsole = findViewById(R.id.consoleId);
         TabItem tabSource = findViewById(R.id.sourceId);
-        final TabItem tabPlot = findViewById(R.id.plotId);
+         TabItem tabPlot = findViewById(R.id.plotId);
 
         final ViewPager viewPager = findViewById(R.id.viewPager);
 
@@ -52,9 +52,7 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if(viewPager.getCurrentItem()==2)
-                    findViewById(R.id.startScript).setEnabled(false);
-                else findViewById(R.id.startScript).setEnabled(true);
+
             }
         });
 

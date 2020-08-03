@@ -24,6 +24,8 @@ public class PagerAdapter extends FragmentPagerAdapter
                 return new ConsoleFragment();
             case 2:
                 return new SourceFragment();
+            case 3:
+                return new PlotFragment();
             default:
                 return null;
         }
