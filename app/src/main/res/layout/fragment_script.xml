@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Введите скрипт"></EditText>
-    <katex.hourglass.in.mathlib.MathView
+
+        <katex.hourglass.in.mathlib.MathView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/katexView"

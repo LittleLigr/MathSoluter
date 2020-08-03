@@ -28,9 +28,10 @@ public class MainActivity extends AppCompatActivity  {
 
 
         TabLayout tabLayout = findViewById(R.id.tabBar);
-        TabItem tabSoript = findViewById(R.id.scriptId);
+        TabItem tabScript = findViewById(R.id.scriptId);
         TabItem tabConsole = findViewById(R.id.consoleId);
-        final TabItem tabSource = findViewById(R.id.sourceId);
+        TabItem tabSource = findViewById(R.id.sourceId);
+        final TabItem tabPlot = findViewById(R.id.plotId);
 
         final ViewPager viewPager = findViewById(R.id.viewPager);
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity  {
         };
 
         String [] tabNames = {
-                "Script", "Console", "Source code"
+                "Script", "Console", "Source code", "Plot"
         };
 
         for (int i = 0; i < imageResId.length; i++) {
