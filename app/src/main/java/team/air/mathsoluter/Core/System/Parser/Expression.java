@@ -179,6 +179,11 @@ public class Expression implements ActionListener {
                         if(isString(right))
                             return left.toString().length()>right.toString().length();
                 }
+                case CAP:{
+                    if(isNumerical(left))
+                        if(isNumerical(right))
+                            return Math.pow((double)left, (double)right);
+                }
 
             }
             throw new ParserError();
@@ -273,7 +278,7 @@ public class Expression implements ActionListener {
             FunctionListener functionStatement = (FunctionListener)calleeResult;
 
             ArrayList<Object> arguments = new ArrayList<>();
-            if(calleeResult instanceof UserExpressionFunction)
+            if(calleeResult instanceof MathExpression)
             {
                 for (Expression arg : this.arguments)
                     arguments.add(arg);
@@ -430,8 +435,16 @@ public class Expression implements ActionListener {
         @Override
         public Object doAction(Enviroment enviroment) {
             Object value = expression.doAction(enviroment);
-            if(value instanceof ClassInstance)
-                return ((ClassInstance)value).get(name);
+            if(value instanceof ClassListener)
+                return ((ClassListener)value).get(name);
+            else if(value instanceof Class)
+            {
+                Function function = ((Class) value).findMethod(name.lexeme);
+                if(function!=null)
+                    if(function.declaration.isStatic)
+                        return new Function(function.declaration,new Enviroment());
+            }
+
             throw new ParserError();
         }
     }
@@ -451,11 +464,14 @@ public class Expression implements ActionListener {
         @Override
         public Object doAction(Enviroment enviroment) {
             Object object = getInstance.expression.doAction(enviroment);
-            if(!(object instanceof ClassInstance))
-                throw new ParserError();
-            Object value = expression.doAction(enviroment);
-            ((ClassInstance)object).set(getInstance.name, value);
-            return null;
+            if(object instanceof ClassListener)
+            {
+                Object value = expression.doAction(enviroment);
+                ((ClassListener)object).set(getInstance.name, value);
+                return null;
+            }
+
+            throw new ParserError();
         }
     }
 
@@ -604,6 +620,18 @@ public class Expression implements ActionListener {
         }
     }
 
+    static class MathExpression extends Expression
+    {
+        final Expression expression;
+        public MathExpression(Expression expression) {
+            this.expression = expression;
+        }
+
+        @Override
+        public Object doAction(Enviroment enviroment) {
+            return new MathClass(expression);
+        }
+    }
     @Override
     public String toString() {
         return "empty expression";

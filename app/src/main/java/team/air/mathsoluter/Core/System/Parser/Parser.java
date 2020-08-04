@@ -1,5 +1,7 @@
 package team.air.mathsoluter.Core.System.Parser;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 import team.air.mathsoluter.Core.System.Token;
@@ -9,12 +11,15 @@ public class Parser {
     int id = 0;
     ArrayList<Token> tokens;
 
+    TextView consoleOutput;
+
     public Parser(ArrayList<Token> tokens)
     {
         this.tokens = tokens;
     }
 
-    public ArrayList<Statement> parse() {
+    public ArrayList<Statement> parse(TextView consoleOutput) {
+        this.consoleOutput=consoleOutput;
         ArrayList<Statement> statements = new ArrayList<>();
         while (isNoEnd()) {
             Statement decl = declaration();
@@ -42,7 +47,6 @@ public class Parser {
         try {
             if (match(Token.TokenType.CLASS)) return classDeclaration();
             if(match(Token.TokenType.FUNCTION)) return functionStatement("function");
-            if(match(Token.TokenType.DOG_SYMBOL)) return undefinedExpression();
             if(match(Token.TokenType.VAR))return varDeclaration();
             return statement();
         }
@@ -50,17 +54,6 @@ public class Parser {
         {
             return null;
         }
-    }
-
-    private Statement undefinedExpression()
-    {
-        Token name = consume(Token.TokenType.IDENTIFIER, "Expect variable name.");
-        Statement body = null;
-        if (match(Token.TokenType.EQUAL)) {
-            body = new Statement.ReturnStatement(expression());
-        }
-        consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
-        return new Statement.UserExpressionStatement(name, body);
     }
 
     private Statement.ClassStatement classDeclaration()
@@ -86,8 +79,19 @@ public class Parser {
             initializer = expression();
         }
 
+        Statement.BlockStatement setter=null, getter=null;
+        if(match(Token.TokenType.COLON))
+        {
+            if(match(Token.TokenType.SET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                setter = new Statement.BlockStatement(block());
+            if(match(Token.TokenType.GET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                getter = new Statement.BlockStatement(block());
+            if(match(Token.TokenType.SET)&&match(Token.TokenType.BRACE_BRACKET_OPEN))
+                setter = new Statement.BlockStatement(block());
+        }
+
         consume(Token.TokenType.END_OF_LINE, "Expect ';' after variable declaration.");
-        return new Statement.VarStatement(name, initializer);
+        return new Statement.VarStatement(name, initializer, setter, getter);
     }
 
     private Statement statement() {
@@ -182,7 +186,7 @@ public class Parser {
     private Statement printStatement() {
         Expression value = expression();
         consume(Token.TokenType.END_OF_LINE, "Expect ';' after value.");
-        return new Statement.PrintStatement(value);
+        return new Statement.PrintStatement(value, consoleOutput);
     }
 
     private Statement expressionStatement() {
@@ -204,6 +208,11 @@ public class Parser {
 
     private Statement.FunctionStatement functionStatement(String name)
     {
+        boolean isStatic = false;
+
+        if(match(Token.TokenType.STATIC))
+            isStatic=true;
+
         Token funcName = consume(Token.TokenType.IDENTIFIER, "Expect "+name+" function");
         consume(Token.TokenType.OPERATOR_BRACKET_OPEN, "expect (");
 
@@ -218,7 +227,7 @@ public class Parser {
         consume(Token.TokenType.OPERATOR_BRACKET_CLOSE, "expect )");
         consume(Token.TokenType.BRACE_BRACKET_OPEN, "Expect '{' before " + name + " body.");
         ArrayList<Statement> body = block();
-        return new Statement.FunctionStatement(funcName, parameters, body);
+        return new Statement.FunctionStatement(funcName, parameters, body, isStatic);
     }
 
     Expression expression() {
@@ -313,9 +322,23 @@ public class Parser {
 
     Expression multiplication()
     {
-        Expression expr = unary();
+        Expression expr = pow();
 
         while(match(Token.TokenType.STAR, Token.TokenType.SLASH))
+        {
+            Token operator = previous();
+            Expression right = pow();
+            expr = new Expression.Binary(expr, operator, right);
+        }
+
+        return  expr;
+    }
+
+    Expression pow()
+    {
+        Expression expr = unary();
+
+        while(match(Token.TokenType.CAP))
         {
             Token operator = previous();
             Expression right = unary();
@@ -378,6 +401,8 @@ public class Parser {
             consume(Token.TokenType.BRACE_BRACKET_CLOSE, "expect }");
             return expression;
         }
+
+        if(match(Token.TokenType.DOG_SYMBOL)) return new Expression.MathExpression(addition());
 
         if (match(Token.TokenType.FALSE)) return new Expression.Literal(false);
         if (match(Token.TokenType.TRUE)) return new Expression.Literal(true);

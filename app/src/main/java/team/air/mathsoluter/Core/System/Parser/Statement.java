@@ -1,5 +1,7 @@
 package team.air.mathsoluter.Core.System.Parser;
 
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,15 +27,17 @@ public class Statement implements ActionListener{
 
     static class PrintStatement extends Statement
     {
-
-        public PrintStatement(Expression expression) {
+        TextView consoleOutput;
+        public PrintStatement(Expression expression, TextView consoleOutput) {
             super(expression);
+            this.consoleOutput=consoleOutput;
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
             Object value = expression.doAction(enviroment);
             System.out.println(value.toString());
+            consoleOutput.setText(consoleOutput.getText()+"\n"+value);
             return null;
         }
     }
@@ -55,9 +59,12 @@ public class Statement implements ActionListener{
     static class VarStatement extends Statement
     {
         final Token name;
-        public VarStatement(Token name, Expression expression) {
+        final BlockStatement setter , getter;
+        public VarStatement(Token name, Expression expression, BlockStatement setter, BlockStatement getter) {
             super(expression);
             this.name = name;
+            this.setter = setter;
+            this.getter = getter;
         }
 
         @Override
@@ -65,23 +72,22 @@ public class Statement implements ActionListener{
             Object value = null;
             if(expression!=null)
                 value = expression.doAction(enviroment);
-            enviroment.define(name.lexeme, value);
+            enviroment.define(name.lexeme, new Variable(value, setter, getter));
             return null;
         }
     }
 
     static class WhileStatement extends Statement
     {
-        final Expression condition;
         final Statement body;
         public WhileStatement(Expression condition, Statement body) {
-            this.condition = condition;
+            super(condition);
             this.body = body;
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
-            while ((boolean)condition.doAction(enviroment)==true)
+            while ((boolean)expression.doAction(enviroment)==true)
                 body.doAction(enviroment);
             return null;
         }
@@ -89,17 +95,16 @@ public class Statement implements ActionListener{
 
     static class IfStatement extends Statement
     {
-        final Expression condition;
         final Statement thenBranch, elseBranch;
         public IfStatement(Expression condition,  Statement thenBranch, Statement elseBranch) {
-            this.condition = condition;
+            super(condition);
             this.thenBranch = thenBranch;
             this.elseBranch = elseBranch;
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
-            Object cond = condition.doAction(enviroment);
+            Object cond = expression.doAction(enviroment);
            if(cond!=null&&(boolean)cond==true)
                thenBranch.doAction(enviroment);
            else if(elseBranch!=null)
@@ -130,11 +135,13 @@ public class Statement implements ActionListener{
         final ArrayList<Token> arguments;
         final Token name;
         final BlockStatement body;
+        final boolean isStatic;
 
-        public FunctionStatement(Token name, ArrayList<Token> arguments, ArrayList<Statement> body) {
+        public FunctionStatement(Token name, ArrayList<Token> arguments, ArrayList<Statement> body, boolean isStatic) {
             this.arguments = arguments;
             this.body = new BlockStatement(body);
             this.name = name;
+            this.isStatic = isStatic;
         }
 
         @Override
@@ -160,6 +167,8 @@ public class Statement implements ActionListener{
             Map<String, Function> methods = new HashMap<>();
             for (Statement.FunctionStatement method : functionStatements) {
                 Function function = new Function(method, enviroment);
+                if(method.isStatic && method.name.lexeme.equals("init"))
+                    throw new ParserError();
                 methods.put(method.name.lexeme, function);
             }
             enviroment.define(name.lexeme, new Class(name.lexeme, methods));
@@ -170,17 +179,20 @@ public class Statement implements ActionListener{
 
     static class UserExpressionStatement extends Statement
     {
-        final Token name;
-        final  Statement body;
-        public UserExpressionStatement(Token name, Statement body) {
-          this.body = body;
-          this.name = name;
+        static int counter = 0;
+        public UserExpressionStatement(Expression body, ArrayList<Token> vars) {
+          super(body);
+        // HashMap<String, Function> functions = new HashMap<>();
+         // functions.put(new Function(new FunctionStatement()))
+        //  new ClassInstance(new Class("MathFunc"+counter,new HashMap<String, Function>(){
+
+        //  }), null);
         }
 
         @Override
         public Object doAction(Enviroment enviroment) {
-            enviroment.define(name.lexeme, new UserExpressionFunction(this));
-            return null;
+            return expression.doAction(enviroment);
+
         }
     }
 
@@ -200,18 +212,6 @@ public class Statement implements ActionListener{
         }
     }
 
-    static class MathStatement extends Statement
-    {
-        final ArrayList<Statement> statements;
 
-        public MathStatement(ArrayList<Statement> statements) {
-            this.statements = statements;
-        }
-
-        @Override
-        public Object doAction(Enviroment enviroment) {
-            return null;
-        }
-    }
 
 }

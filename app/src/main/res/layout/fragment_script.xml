@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ScriptFragment"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <team.air.mathsoluter.Core.Util.NumberedEditText
+            android:id="@+id/scriptTextView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Введите скрипт"
+            android:text="var x = @y;\nx.setVar(,10);\nprint x.solve();"
+            android:paddingLeft="30dp"
+            android:textAlignment="viewStart"
+            android:textSize="25sp" />
+
+    <katex.hourglass.in.mathlib.MathView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/katexView"
+        app:setClickable="true"
+        app:setTextColor="@color/colorPrimary"
+        app:setTextSize="14sp"
+        />
+    </LinearLayout>
+
+</LinearLayout>
