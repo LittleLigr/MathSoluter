@@ -1,11 +1,8 @@
 package team.air.mathsoluter;
 
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,8 +10,6 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import team.air.mathsoluter.Core.System.Lexer.Lexer;
@@ -23,11 +18,11 @@ import team.air.mathsoluter.Core.System.Parser.Parser;
 
 public class MainActivity extends AppCompatActivity  {
 
+    static CustomKeyboard mCustomKeyboard;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         TabLayout tabLayout = findViewById(R.id.tabBar);
         TabItem tabSoript = findViewById(R.id.scriptId);
@@ -54,9 +49,6 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                if(viewPager.getCurrentItem()==2)
-                    findViewById(R.id.startScript).setEnabled(false);
-                else findViewById(R.id.startScript).setEnabled(true);
             }
         });
 
@@ -78,6 +70,8 @@ public class MainActivity extends AppCompatActivity  {
             tabLayout.getTabAt(i).setText(sb);
         }
 
+        //mCustomKeyboard= new CustomKeyboard(this, R.id.keyboard, R.xml.hexkbd );
+
 
     }
 
@@ -86,7 +80,26 @@ public class MainActivity extends AppCompatActivity  {
         TextView v = (TextView)findViewById(R.id.scriptTextView);
         TextView console = (TextView)findViewById(R.id.consoleTextView);
 
-        new Interpretator().interpret(new Parser(new Lexer().lex(v.getText().toString())).parse(console));
+        String simps = "function Simpson(a,b,n,expr,varv){" +
+                "var h = (b-a)/n;" +
+                "var k1 = 0;" +
+                "var k2 = 0;" +
+                "for(var i = 1; i < n; i =i+ h){" +
+                "expr.setVar(varv, a+i*h);" +
+                "k1 = k1 + expr.solve();" +
+                "expr.setVar(varv, a+(i+1)*h);" +
+                "k2 = k2+expr.solve();" +
+                "}" +
+                "expr.setVar(varv, a);" +
+                "return h/3*(expr.solve()+4*k1+2*k2;" +
+                "}";
+
+        new Interpretator().interpret(new Parser(new Lexer().lex(simps+v.getText().toString())).parse(console));
+    }
+
+    @Override public void onBackPressed() {
+        // NOTE Trap the back key: when the CustomKeyboard is still visible hide it, only when it is invisible, finish activity
+       // if( mCustomKeyboard.isCustomKeyboardVisible() ) mCustomKeyboard.hideCustomKeyboard(); else this.finish();
     }
 
 }

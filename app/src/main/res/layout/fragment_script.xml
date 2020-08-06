@@ -12,17 +12,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <team.air.mathsoluter.Core.Util.NumberedEditText
+        <EditText
             android:id="@+id/scriptTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Введите скрипт"
-            android:text="var x = @y;\nx.setVar(,10);\nprint x.solve();"
-            android:paddingLeft="30dp"
-            android:textAlignment="viewStart"
-            android:textSize="25sp" />
+            android:hint="Введите скрипт"></EditText>
 
-    <katex.hourglass.in.mathlib.MathView
+        <katex.hourglass.in.mathlib.MathView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/katexView"

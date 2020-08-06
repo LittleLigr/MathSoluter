@@ -1,10 +1,13 @@
 package team.air.mathsoluter;
 
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -58,6 +61,8 @@ public class ScriptFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_script, container, false);
+        View thisView = inflater.inflate(R.layout.fragment_script, container, false);
+       // MainActivity.mCustomKeyboard.registerEditText((EditText) thisView.findViewById(R.id.scriptTextView));
+        return thisView;
     }
 }

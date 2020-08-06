@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Row android:id="@+id/row1">
+        <Key android:codes="81"    android:keyLabel="q" />
+        <Key android:codes="65"    android:keyLabel="a" />
+        <Key android:codes="90"    android:keyLabel="z" />
+    </Row>
+
+    <Row android:id="@+id/row2">
+        <Key android:codes="87"    android:keyLabel="w" />
+        <Key android:codes="83"    android:keyLabel="s" />
+        <Key android:codes="88"    android:keyLabel="x" />
+    </Row>
+
+    <Row android:id="@+id/row3">
+        <Key android:codes="69"    android:keyLabel="e" />
+        <Key android:codes="68"    android:keyLabel="d" />
+        <Key android:codes="67"    android:keyLabel="c" />
+    </Row>
+
+    <Row android:id="@+id/row4">
+        <Key android:codes="82"    android:keyLabel="r" />
+        <Key android:codes="70"    android:keyLabel="f" />
+        <Key android:codes="86"    android:keyLabel="v" />
+    </Row>
+
+    <Row android:id="@+id/row5">
+        <Key android:codes="84"    android:keyLabel="t" />
+        <Key android:codes="71"    android:keyLabel="g" />
+        <Key android:codes="66"    android:keyLabel="b" />
+    </Row>
+
+    <Row android:id="@+id/row6">
+        <Key android:codes="89"    android:keyLabel="y" />
+        <Key android:codes="72"    android:keyLabel="h" />
+        <Key android:codes="78"    android:keyLabel="n" />
+    </Row>
+
+    <Row android:id="@+id/row7">
+        <Key android:codes="81"    android:keyLabel="u" />
+        <Key android:codes="65"    android:keyLabel="j" />
+        <Key android:codes="90"    android:keyLabel="m" />
+    </Row>
+
+    <Row android:id="@+id/row8">
+        <Key android:codes="81"    android:keyLabel="q" />
+        <Key android:codes="65"    android:keyLabel="a" />
+        <Key android:codes="90"    android:keyLabel="z" />
+    </Row>
+
+    <Row android:id="@+id/row9">
+        <Key android:codes="81"    android:keyLabel="q" />
+        <Key android:codes="65"    android:keyLabel="a" />
+        <Key android:codes="90"    android:keyLabel="z" />
+    </Row>
+
+    <Row android:id="@+id/row10">
+        <Key android:codes="81"    android:keyLabel="q" />
+        <Key android:codes="65"    android:keyLabel="a" />
+        <Key android:codes="90"    android:keyLabel="z" />
+    </Row>
+
+</android.support.constraint.ConstraintLayout>
+
