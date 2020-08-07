@@ -1,5 +1,6 @@
 package team.air.mathsoluter;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -74,6 +75,8 @@ public class MainActivity extends AppCompatActivity  {
             tabLayout.getTabAt(i).setText(sb);
         }
 
+        //Intent intent = new Intent(this, ListViewOfMethods.class);
+        //startActivity(intent);
 
     }
 
