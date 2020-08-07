@@ -18,7 +18,7 @@ public class ListViewOfMethods extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_view_of_methods);
-
+        /*
         toolbar =(Toolbar) findViewById(R.id.toolbar);
 
         listViewOfMethods=(ListView) findViewById(R.id.listViewOfMethods);
@@ -33,6 +33,6 @@ public class ListViewOfMethods extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        listViewOfMethods.setAdapter(mAdapter);
+        listViewOfMethods.setAdapter(mAdapter);*/
     }
 }

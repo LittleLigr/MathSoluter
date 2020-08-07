@@ -86,6 +86,11 @@ public class MainActivity extends AppCompatActivity  {
         TextView console = (TextView)findViewById(R.id.consoleTextView);
         new Interpretator().interpret(new Parser(new Lexer().lex(v.getText().toString())).parse(console));
     }
+
+    public void s()
+    {
+
+    }
 }
 
 
