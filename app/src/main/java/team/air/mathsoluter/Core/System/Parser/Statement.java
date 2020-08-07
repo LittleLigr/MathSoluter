@@ -105,11 +105,11 @@ public class Statement implements ActionListener{
         @Override
         public Object doAction(Enviroment enviroment) {
             Object cond = expression.doAction(enviroment);
-           if(cond!=null&&(boolean)cond==true)
-               thenBranch.doAction(enviroment);
-           else if(elseBranch!=null)
-               elseBranch.doAction(enviroment);
-           return null;
+            if(cond!=null&&(boolean)cond==true)
+                thenBranch.doAction(enviroment);
+            else if(elseBranch!=null)
+                elseBranch.doAction(enviroment);
+            return null;
         }
     }
 
@@ -122,10 +122,10 @@ public class Statement implements ActionListener{
 
         @Override
         public Object doAction(Enviroment enviroment) {
-           Enviroment enviromentChild = new Enviroment(enviroment);
+            Enviroment enviromentChild = new Enviroment(enviroment);
 
-           for(Statement statement : statements)
-               statement.doAction(enviromentChild);
+            for(Statement statement : statements)
+                statement.doAction(enviromentChild);
             return null;
         }
     }
@@ -181,12 +181,12 @@ public class Statement implements ActionListener{
     {
         static int counter = 0;
         public UserExpressionStatement(Expression body, ArrayList<Token> vars) {
-          super(body);
-        // HashMap<String, Function> functions = new HashMap<>();
-         // functions.put(new Function(new FunctionStatement()))
-        //  new ClassInstance(new Class("MathFunc"+counter,new HashMap<String, Function>(){
+            super(body);
+            // HashMap<String, Function> functions = new HashMap<>();
+            // functions.put(new Function(new FunctionStatement()))
+            //  new ClassInstance(new Class("MathFunc"+counter,new HashMap<String, Function>(){
 
-        //  }), null);
+            //  }), null);
         }
 
         @Override
@@ -198,7 +198,7 @@ public class Statement implements ActionListener{
 
     static class ReturnStatement extends Statement
     {
-      final Expression value;
+        final Expression value;
 
         public ReturnStatement(Expression value) {
             this.value = value;

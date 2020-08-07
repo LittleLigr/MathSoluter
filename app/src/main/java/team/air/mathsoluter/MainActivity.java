@@ -1,5 +1,6 @@
 package team.air.mathsoluter;
 
+import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.TabItem;
 import android.support.design.widget.TabLayout;
@@ -10,28 +11,32 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import team.air.mathsoluter.Activities.CustomKeyboard.CustomKeyboardPageAdapter;
+import team.air.mathsoluter.Activities.CustomKeyboard.CustomKeyboardTemplate;
 import team.air.mathsoluter.Core.System.Lexer.Lexer;
 import team.air.mathsoluter.Core.System.Parser.Interpretator;
 import team.air.mathsoluter.Core.System.Parser.Parser;
+import team.air.mathsoluter.Core.Util.CallContainer;
 
 public class MainActivity extends AppCompatActivity  {
 
-    static CustomKeyboard mCustomKeyboard;
+    Activity thisActivity;
+    ViewPager keyboardPager;
+    CustomKeyboardPageAdapter customKeyboardPageAdapter;
+    View keyboardLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        thisActivity = this;
+        keyboardLayout = findViewById(R.id.keyboardLayout);
         TabLayout tabLayout = findViewById(R.id.tabBar);
-        TabItem tabSoript = findViewById(R.id.scriptId);
-        TabItem tabConsole = findViewById(R.id.consoleId);
-        final TabItem tabSource = findViewById(R.id.sourceId);
 
+        //настраиваем фрагменты окон
         final ViewPager viewPager = findViewById(R.id.viewPager);
-
-
         PagerAdapter pagerAdapter =
                 new PagerAdapter(getSupportFragmentManager() , tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
@@ -52,6 +57,49 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+
+        //настраиваем фрагменты клавиатуры
+
+        final TabLayout keyTabLayout = findViewById(R.id.keyboardTabBar);
+        keyboardPager = findViewById(R.id.keyboardViewPager);
+        customKeyboardPageAdapter = new CustomKeyboardPageAdapter(getSupportFragmentManager() , keyTabLayout.getTabCount());
+        keyboardPager.setAdapter(customKeyboardPageAdapter);
+
+        keyTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                keyboardPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        customKeyboardPageAdapter.tab1.callContainer = new CallContainer() {
+            @Override
+            public void call() {
+                customKeyboardPageAdapter.tab1.init(thisActivity, R.xml.custom_keyboard_tab1, keyboardLayout);
+                customKeyboardPageAdapter.tab1.registerEditText((EditText)findViewById(R.id.scriptTextView));
+            }
+        };
+
+        customKeyboardPageAdapter.tab2.callContainer = new CallContainer() {
+            @Override
+            public void call() {
+                customKeyboardPageAdapter.tab2.init(thisActivity, R.xml.custom_keyboard_tab1, keyboardLayout);
+                customKeyboardPageAdapter.tab2.registerEditText((EditText)findViewById(R.id.scriptTextView));
+            }
+        };
+
+
+
         int[] imageResId = {
                 R.drawable.errorview, R.drawable.noticeview
         };
@@ -70,10 +118,10 @@ public class MainActivity extends AppCompatActivity  {
             tabLayout.getTabAt(i).setText(sb);
         }
 
-        //mCustomKeyboard= new CustomKeyboard(this, R.id.keyboard, R.xml.hexkbd );
-
-
+        //CustomKeyboardPageAdapter customKeyboardActivity = findViewById(R.id.keyboardViewPager).findViewById();
     }
+
+
 
     public void click(View view)
     {
@@ -99,7 +147,7 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override public void onBackPressed() {
         // NOTE Trap the back key: when the CustomKeyboard is still visible hide it, only when it is invisible, finish activity
-       // if( mCustomKeyboard.isCustomKeyboardVisible() ) mCustomKeyboard.hideCustomKeyboard(); else this.finish();
+        if( keyboardLayout.getVisibility() == View.VISIBLE ) keyboardLayout.setVisibility(View.GONE); else this.finish();
     }
 
 }

@@ -92,10 +92,54 @@
         android:layout_weight="1"
         tools:ignore="MissingConstraints" />
 
-    <include
-        layout="@layout/custom_keyboard_layout"
+    <LinearLayout
+        android:id="@+id/keyboardLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2" />
+        android:layout_weight="1.5"
+        android:orientation="vertical"
+        tools:context=".Activities.CustomKeyboard.CustomKeyboardActivity">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/keyboardTabBar"
+            style="@style/MyCustomTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+
+            android:layout_marginEnd="1dp"
+            android:background="@color/cardview_dark_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabIndicatorColor="@color/AppOrangeColor"
+            app:tabTextColor="@color/AppBlueColor"
+            tools:ignore="MissingConstraints">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/keyTab1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#98D7D1"
+                android:text="keyTab1" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/keyTab2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#98D7D1"
+                android:text="keyTab1" />
+
+
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/keyboardViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
 
 </LinearLayout>
