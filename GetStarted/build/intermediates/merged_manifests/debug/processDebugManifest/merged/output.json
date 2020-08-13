@@ -1,0 +1,1 @@
+[{"outputType":{"type":"MERGED_MANIFESTS"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":1410,"versionName":"1.4.1","enabled":true,"outputFile":"GetStarted-debug.apk","fullName":"debug","baseName":"debug"},"path":"AndroidManifest.xml","properties":{"packageId":"com.myscript.iink.getstarted","split":"","minSdkVersion":"16"}}]

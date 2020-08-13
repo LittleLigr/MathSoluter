@@ -4,25 +4,26 @@ import android.app.Activity;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
 import android.text.Editable;
 import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import java.util.ArrayList;
+import com.myscript.iink.Editor;
+import com.myscript.iink.uireferenceimplementation.EditorView;
+
 import java.util.HashMap;
 
 import team.air.mathsoluter.Core.Util.CallContainer;
 import team.air.mathsoluter.R;
-import team.air.mathsoluter.ScriptFragment;
 
 public class CustomKeyboardTemplate extends Fragment {
 
@@ -107,8 +108,6 @@ public class CustomKeyboardTemplate extends Fragment {
         public final static int CodeNext     = 55005;
         public final static int CodeClear    = 55006;
 
-
-
         @Override
         public void onPress(int primaryCode) {
 
@@ -117,6 +116,8 @@ public class CustomKeyboardTemplate extends Fragment {
         @Override
         public void onRelease(int primaryCode) {
             View focusCurrent = host.getWindow().getCurrentFocus();
+            EditorView editorView = host.findViewById(R.id.editor_view);
+
             EditText edittext = (EditText) focusCurrent;
             Editable editable = edittext.getText();
             int start = edittext.getSelectionEnd();

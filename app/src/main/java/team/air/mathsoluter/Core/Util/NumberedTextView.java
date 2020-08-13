@@ -5,10 +5,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.widget.EditText;
-import android.widget.TextView;
 
-public class NumberedTextView extends android.support.v7.widget.AppCompatTextView {
+public class NumberedTextView extends androidx.appcompat.widget.AppCompatTextView {
 
     private Rect rect;
     private Paint paint;

@@ -2,10 +2,11 @@ package team.air.mathsoluter;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
-import android.support.design.widget.TabItem;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+
+import com.google.android.material.tabs.TabLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -15,10 +16,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import team.air.mathsoluter.Activities.CustomKeyboard.CustomKeyboardPageAdapter;
-import team.air.mathsoluter.Activities.CustomKeyboard.CustomKeyboardTemplate;
-import team.air.mathsoluter.Core.System.Lexer.Lexer;
-import team.air.mathsoluter.Core.System.Parser.Interpretator;
-import team.air.mathsoluter.Core.System.Parser.Parser;
 import team.air.mathsoluter.Core.Util.CallContainer;
 
 public class MainActivity extends AppCompatActivity  {
@@ -44,7 +41,6 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-
             }
 
             @Override
@@ -86,7 +82,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void call() {
                 customKeyboardPageAdapter.tab1.init(thisActivity, R.xml.custom_keyboard_tab1, keyboardLayout);
-                customKeyboardPageAdapter.tab1.registerEditText((EditText)findViewById(R.id.scriptTextView));
+               // customKeyboardPageAdapter.tab1.registerEditText((EditText)findViewById(R.id.scriptTextView));
             }
         };
 
@@ -94,9 +90,10 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void call() {
                 customKeyboardPageAdapter.tab2.init(thisActivity, R.xml.custom_keyboard_tab1, keyboardLayout);
-                customKeyboardPageAdapter.tab2.registerEditText((EditText)findViewById(R.id.scriptTextView));
+              //  customKeyboardPageAdapter.tab2.registerEditText((EditText)findViewById(R.id.scriptTextView));
             }
         };
+
 
 
 
@@ -125,7 +122,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void click(View view)
     {
-        TextView v = (TextView)findViewById(R.id.scriptTextView);
+        //TextView v = (TextView)findViewById(R.id.scriptTextView);
         TextView console = (TextView)findViewById(R.id.consoleTextView);
 
         String simps = "function Simpson(a,b,n,expr,varv){" +
@@ -142,7 +139,7 @@ public class MainActivity extends AppCompatActivity  {
                 "return h/3*(expr.solve()+4*k1+2*k2;" +
                 "}";
 
-        new Interpretator().interpret(new Parser(new Lexer().lex(simps+v.getText().toString())).parse(console));
+        //new Interpretator().interpret(new Parser(new Lexer().lex(simps+v.getText().toString())).parse(console));
     }
 
     @Override public void onBackPressed() {

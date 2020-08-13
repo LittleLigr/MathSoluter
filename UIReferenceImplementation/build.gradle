@@ -1,0 +1,25 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+    defaultConfig {
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+        versionCode 1410
+        versionName '1.4.1'
+
+        vectorDrawables.useSupportLibrary true
+    }
+}
+
+dependencies {
+    implementation "androidx.appcompat:appcompat:${project.ext.appcompatVersion}"
+    implementation 'com.google.code.gson:gson:2.8.6'
+    api "com.myscript:iink:1.4.1"
+}

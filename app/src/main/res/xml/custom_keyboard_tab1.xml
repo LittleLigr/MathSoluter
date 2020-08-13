@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:keyWidth="12.50%p"
-    android:keyHeight="7%p">
+    android:keyHeight="6%p"
+    >
     <Row android:id="@+id/row1">
         <Key android:codes="81"    android:keyLabel="q" />
         <Key android:codes="87"    android:keyLabel="w" />
@@ -38,16 +38,16 @@
         <Key android:codes="78"    android:keyLabel="n" />
         <Key android:codes="77"    android:keyLabel="m" />
         <Key android:codes="188"    android:keyLabel="," />
-        <Key android:codes="190"    android:keyLabel="." />
-        <Key android:codes="191"    android:keyLabel="/" />
+        <Key android:codes="-5"    android:keyLabel="delete" android:keyWidth="20%p"/>
+
     </Row>
 
     <Row android:id="@+id/row4">
-        <Key android:codes="300"    android:keyLabel="var" />
-        <Key android:codes="301"    android:keyLabel="class" />
-        <Key android:codes="32"    android:keyLabel="Space" android:keyWidth="50%p"/>
-        <Key android:codes="302"    android:keyLabel="\@" />
-        <Key android:codes="303"    android:keyLabel="function" />
+        <Key android:codes="300"    android:keyLabel="var" android:keyWidth="10%p"/>
+        <Key android:codes="301"    android:keyLabel="class" android:keyWidth="20%p"/>
+        <Key android:codes="32"    android:keyLabel="Space" android:keyWidth="35%p"/>
+        <Key android:codes="302"    android:keyLabel="\@" android:keyWidth="10%p"/>
+        <Key android:codes="303"    android:keyLabel="function" android:keyWidth="25%p"/>
     </Row>
 
 </Keyboard>

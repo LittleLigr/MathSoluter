@@ -1,1 +1,4 @@
+include ':GetStarted'
+include ':Demo'
+include ':UIReferenceImplementation'
 include ':app'

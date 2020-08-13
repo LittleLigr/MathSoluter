@@ -1,12 +1,9 @@
 package team.air.mathsoluter.Activities.CustomKeyboard;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 
-import team.air.mathsoluter.Core.Util.CallContainer;
-import team.air.mathsoluter.R;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 public class CustomKeyboardPageAdapter extends FragmentPagerAdapter {
     private int numOfTabs;
