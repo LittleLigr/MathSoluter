@@ -134,7 +134,7 @@
 
         </com.google.android.material.tabs.TabLayout>
 
-        <androidx.viewpager.widget.ViewPager
+        <team.air.mathsoluter.Activities.CustomKeyboard.CustomKeyboardViewPager
             android:id="@+id/keyboardViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

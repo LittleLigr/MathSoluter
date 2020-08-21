@@ -15,7 +15,7 @@ public class CustomKeyboardPageAdapter extends FragmentPagerAdapter {
         super(fm);
         this.numOfTabs = numOfTabs;
         tab1 = new CustomKeyboardTemplate();
-        tab2 = new CustomKeyboardTemplate();
+        tab2 = new CustomKeyboardMyScriptTemplate();
     }
 
     @Override

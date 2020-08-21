@@ -5,23 +5,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ScriptFragment">
-
-    <LinearLayout
+\
+    <team.air.mathsoluter.Core.Util.NumberedEditText
+        android:id="@+id/scriptEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/AppDarkBalueColor2"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:paddingLeft="30dp"
+        android:textAlignment="viewStart"
+        android:textSize="25sp" />
 
-        <Button
-            android:id="@+id/convert_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Convert" />
-    </LinearLayout>
-
-    <include
-        layout="@layout/editor_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

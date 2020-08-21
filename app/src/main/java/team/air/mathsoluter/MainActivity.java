@@ -1,9 +1,23 @@
 package team.air.mathsoluter;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 
 import com.google.android.material.tabs.TabLayout;
+import com.myscript.iink.Configuration;
+import com.myscript.iink.ContentPackage;
+import com.myscript.iink.ContentPart;
+import com.myscript.iink.ConversionState;
+import com.myscript.iink.Editor;
+import com.myscript.iink.Engine;
+import com.myscript.iink.IEditorListener;
+import com.myscript.iink.uireferenceimplementation.EditorView;
+import com.myscript.iink.uireferenceimplementation.FontUtils;
+import com.myscript.iink.uireferenceimplementation.InputController;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -11,12 +25,24 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
+import team.air.mathsoluter.Activities.CustomKeyboard.CallContainerWithView;
 import team.air.mathsoluter.Activities.CustomKeyboard.CustomKeyboardPageAdapter;
+import team.air.mathsoluter.Core.System.Lexer.Lexer;
+import team.air.mathsoluter.Core.System.Parser.Interpretator;
+import team.air.mathsoluter.Core.System.Parser.Parser;
 import team.air.mathsoluter.Core.Util.CallContainer;
+import team.air.mathsoluter.MyScript.MySctiptManager;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -58,6 +84,7 @@ public class MainActivity extends AppCompatActivity  {
 
         final TabLayout keyTabLayout = findViewById(R.id.keyboardTabBar);
         keyboardPager = findViewById(R.id.keyboardViewPager);
+
         customKeyboardPageAdapter = new CustomKeyboardPageAdapter(getSupportFragmentManager() , keyTabLayout.getTabCount());
         keyboardPager.setAdapter(customKeyboardPageAdapter);
 
@@ -97,6 +124,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
+
         int[] imageResId = {
                 R.drawable.errorview, R.drawable.noticeview
         };
@@ -122,7 +150,7 @@ public class MainActivity extends AppCompatActivity  {
 
     public void click(View view)
     {
-        //TextView v = (TextView)findViewById(R.id.scriptTextView);
+        TextView v = (TextView)findViewById(R.id.scriptEditText);
         TextView console = (TextView)findViewById(R.id.consoleTextView);
 
         String simps = "function Simpson(a,b,n,expr,varv){" +
@@ -139,7 +167,7 @@ public class MainActivity extends AppCompatActivity  {
                 "return h/3*(expr.solve()+4*k1+2*k2;" +
                 "}";
 
-        //new Interpretator().interpret(new Parser(new Lexer().lex(simps+v.getText().toString())).parse(console));
+        new Interpretator().interpret(new Parser(new Lexer().lex(simps+v.getText().toString())).parse(console));
     }
 
     @Override public void onBackPressed() {

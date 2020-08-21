@@ -27,10 +27,10 @@ import team.air.mathsoluter.R;
 
 public class CustomKeyboardTemplate extends Fragment {
 
-    private View fragmentView=null;
-    private KeyboardView keyboardView;
-    public Activity host;
-    public View viewPager;
+    protected View fragmentView=null;
+    protected KeyboardView keyboardView;
+    protected Activity host;
+    protected View viewPager;
     public CallContainer callContainer;
 
 
